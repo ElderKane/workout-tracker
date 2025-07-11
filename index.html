@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .page { display: none; }
+        .page.active { display: block; }
+        /* Simple scrollbar styling */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <div id="app-container" class="max-w-md mx-auto min-h-screen bg-gray-800 shadow-lg">
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+
+        <!-- Custom Modal -->
+        <div id="custom-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+            <div class="bg-gray-700 rounded-lg p-6 w-11/12 max-w-sm text-center">
+                <p id="modal-message" class="mb-4 text-lg"></p>
+                <button id="modal-close-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">Close</button>
+            </div>
+        </div>
+
+        <!-- Auth Page -->
+        <div id="auth-page" class="page active p-6">
+            <div id="login-view">
+                <h1 class="text-3xl font-bold mb-6 text-center text-blue-400">Sign In</h1>
+                <form id="login-form" class="space-y-4">
+                    <input type="email" id="login-email" placeholder="Email" class="w-full p-3 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <input type="password" id="login-password" placeholder="Password" class="w-full p-3 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded">Sign In</button>
+                </form>
+                <p class="mt-4 text-center">
+                    <a href="#" id="forgot-password-link" class="text-blue-400 hover:underline">Forgot Password?</a>
+                </p>
+                <p class="mt-4 text-center">
+                    Don't have an account? <a href="#" id="show-signup" class="text-blue-400 font-bold hover:underline">Sign Up</a>
+                </p>
+            </div>
+            <div id="signup-view" class="hidden">
+                <h1 class="text-3xl font-bold mb-6 text-center text-blue-400">Sign Up</h1>
+                <form id="signup-form" class="space-y-4">
+                    <input type="email" id="signup-email" placeholder="Email" class="w-full p-3 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <input type="password" id="signup-password" placeholder="Password" class="w-full p-3 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <input type="password" id="signup-confirm-password" placeholder="Confirm Password" class="w-full p-3 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded">Sign Up</button>
+                </form>
+                <p class="mt-4 text-center">
+                    Already have an account? <a href="#" id="show-login" class="text-blue-400 font-bold hover:underline">Sign In</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Main App Content (hidden until logged in) -->
+        <div id="main-app" class="hidden">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page p-4">
+                <h1 class="text-2xl font-bold mb-4 text-blue-400">Dashboard</h1>
+                <div id="calendar" class="bg-gray-700 p-4 rounded-lg mb-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <button id="prev-month" class="p-2 rounded-full bg-gray-600 hover:bg-gray-500">&lt;</button>
+                        <h2 id="month-year" class="text-xl font-semibold"></h2>
+                        <button id="next-month" class="p-2 rounded-full bg-gray-600 hover:bg-gray-500">&gt;</button>
+                    </div>
+                    <div id="calendar-grid" class="grid grid-cols-7 gap-1 text-center font-semibold">
+                        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                    </div>
+                    <div id="calendar-days" class="grid grid-cols-7 gap-1 text-center mt-2"></div>
+                </div>
+                 <p class="text-center text-gray-400 mb-4">Workouts this month: <span id="workout-count" class="font-bold text-white">0</span></p>
+            </div>
+
+            <!-- Workout Plans Page -->
+            <div id="workout-plans-page" class="page p-4">
+                 <h1 class="text-2xl font-bold mb-4 text-blue-400">Workout Plans</h1>
+                 <div id="workout-plans-list" class="space-y-3">
+                     <!-- Workout plans will be dynamically inserted here -->
+                 </div>
+                 <button id="create-new-plan-btn" class="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Create New Plan</button>
+            </div>
+            
+            <!-- Create/Edit Workout Plan Page -->
+            <div id="create-plan-page" class="page p-4">
+                <h1 id="create-plan-title" class="text-2xl font-bold mb-4 text-blue-400">Create Workout Plan</h1>
+                <input type="text" id="plan-name" placeholder="Workout Plan Name (e.g., Push Day)" class="w-full p-3 bg-gray-700 rounded border border-gray-600 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                
+                <h2 class="text-xl font-semibold mb-2">Exercises</h2>
+                <div id="exercises-in-plan" class="space-y-4 mb-4">
+                    <!-- Added exercises will appear here -->
+                </div>
+
+                <button id="add-exercise-to-plan-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg mb-4">Add Exercise</button>
+                <button id="save-plan-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Save Plan</button>
+            </div>
+
+            <!-- Active Workout Page -->
+            <div id="active-workout-page" class="page">
+                <div id="stopwatch" class="sticky top-0 bg-gray-900 p-4 text-center z-10">
+                    <p class="text-5xl font-mono" id="stopwatch-display">00:00:00</p>
+                    <div class="flex justify-center space-x-4 mt-2">
+                        <button id="stopwatch-start" class="bg-green-500 px-4 py-2 rounded">Start</button>
+                        <button id="stopwatch-pause" class="bg-yellow-500 px-4 py-2 rounded">Pause</button>
+                        <button id="stopwatch-reset" class="bg-red-500 px-4 py-2 rounded">Reset</button>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h1 id="active-workout-name" class="text-2xl font-bold mb-4 text-blue-400"></h1>
+                    <div id="active-workout-exercises" class="space-y-6">
+                        <!-- Active exercises will be rendered here -->
+                    </div>
+                    <button id="complete-workout-btn" class="mt-8 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg disabled:bg-gray-500 disabled:cursor-not-allowed">Mark as Complete</button>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-gray-900 border-t border-gray-700 flex justify-around">
+                <button data-page="dashboard-page" class="nav-btn p-3 flex-1 text-center text-gray-400 hover:bg-gray-700 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                    <span class="text-xs">Dashboard</span>
+                </button>
+                <button data-page="workout-plans-page" class="nav-btn p-3 flex-1 text-center text-gray-400 hover:bg-gray-700 hover:text-white">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                    <span class="text-xs">Plans</span>
+                </button>
+                <button id="sign-out-btn" class="p-3 flex-1 text-center text-gray-400 hover:bg-gray-700 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                    <span class="text-xs">Sign Out</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <script type="module">
+        // Firebase Imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            signOut, 
+            onAuthStateChanged,
+            sendPasswordResetEmail,
+            signInAnonymously,
+            signInWithCustomToken
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            getDoc,
+            addDoc,
+            collection,
+            onSnapshot,
+            query,
+            where,
+            updateDoc,
+            deleteDoc,
+            writeBatch
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Your web app's Firebase configuration with your provided keys
+        const firebaseConfig = {
+            apiKey: "AIzaSyB2vMK0bKqDVjrwpFOqZtLrI8xEE9-F9xc",
+            authDomain: "workout-tracker-6234f.firebaseapp.com",
+            projectId: "workout-tracker-6234f",
+            storageBucket: "workout-tracker-6234f.appspot.com",
+            messagingSenderId: "870347402147",
+            appId: "1:870347402147:web:e22f664f4df086fd1f0816",
+            measurementId: "G-MLE13JHZN1"
+        };
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-workout-app';
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Global State
+        let currentUser = null;
+        let currentUserId = null;
+        let currentPlanId = null; // Used when editing a plan
+        let workoutLogs = []; // To store completed workout dates
+        let workoutPlans = [];
+        
+        // UI Elements
+        const pages = document.querySelectorAll('.page');
+        const mainApp = document.getElementById('main-app');
+        const authPage = document.getElementById('auth-page');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const navBtns = document.querySelectorAll('.nav-btn');
+
+        // --- Utility Functions ---
+        function showLoading() { loadingSpinner.classList.remove('hidden'); }
+        function hideLoading() { loadingSpinner.classList.add('hidden'); }
+
+        function showModal(message) {
+            document.getElementById('modal-message').textContent = message;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function navigateTo(pageId) {
+            pages.forEach(page => page.classList.remove('active'));
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            // Highlight active nav button
+            navBtns.forEach(btn => {
+                if (btn.dataset.page === pageId) {
+                    btn.classList.add('text-white');
+                    btn.classList.remove('text-gray-400');
+                } else {
+                    btn.classList.add('text-gray-400');
+                    btn.classList.remove('text-white');
+                }
+            });
+        }
+        
+        // --- Authentication ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                currentUserId = user.uid;
+                mainApp.classList.remove('hidden');
+                authPage.classList.add('hidden');
+                navigateTo('dashboard-page');
+                setupListeners();
+            } else {
+                currentUser = null;
+                currentUserId = null;
+                mainApp.classList.add('hidden');
+                authPage.classList.remove('hidden');
+                navigateTo('auth-page');
+            }
+            hideLoading();
+        });
+
+        // Initial Auth Check
+        async function initializeAuth() {
+            showLoading();
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    console.log("No initial auth token found. Waiting for user sign-in.");
+                }
+            } catch (error) {
+                console.error("Authentication Error:", error);
+                showModal(`Authentication failed: ${error.message}`);
+                hideLoading();
+            }
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                showModal(error.message);
+            } finally {
+                hideLoading();
+            }
+        });
+
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+
+            if (password !== confirmPassword) {
+                showModal("Passwords do not match.");
+                return;
+            }
+            
+            showLoading();
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                // Create a user profile document
+                const userDocRef = doc(db, `artifacts/${appId}/users`, userCredential.user.uid);
+                await setDoc(userDocRef, {
+                    email: userCredential.user.email,
+                    createdAt: new Date(),
+                    unitPreference: 'lbs'
+                });
+            } catch (error) {
+                showModal(error.message);
+            } finally {
+                hideLoading();
+            }
+        });
+
+        document.getElementById('forgot-password-link').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const email = prompt("Please enter your email address to receive a password reset link:");
+            if (email) {
+                showLoading();
+                try {
+                    await sendPasswordResetEmail(auth, email);
+                    showModal("Password reset email sent! Please check your inbox.");
+                } catch (error) {
+                    showModal(error.message);
+                } finally {
+                    hideLoading();
+                }
+            }
+        });
+
+        document.getElementById('sign-out-btn').addEventListener('click', async () => {
+            showLoading();
+            await signOut(auth);
+            // Clear local state
+            workoutLogs = [];
+            workoutPlans = [];
+            document.getElementById('workout-plans-list').innerHTML = '';
+            document.getElementById('calendar-days').innerHTML = '';
+        });
+
+        document.getElementById('show-signup').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('signup-view').classList.remove('hidden');
+        });
+
+        document.getElementById('show-login').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('login-view').classList.remove('hidden');
+            document.getElementById('signup-view').classList.add('hidden');
+        });
+
+        // --- Navigation ---
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const pageId = btn.dataset.page;
+                if (pageId) {
+                    navigateTo(pageId);
+                }
+            });
+        });
+        
+        // --- Calendar ---
+        let currentDate = new Date();
+
+        function renderCalendar() {
+            const monthYearEl = document.getElementById('month-year');
+            const calendarDaysEl = document.getElementById('calendar-days');
+            
+            calendarDaysEl.innerHTML = '';
+            const month = currentDate.getMonth();
+            const year = currentDate.getFullYear();
+            
+            monthYearEl.textContent = `${currentDate.toLocaleString('default', { month: 'long' })} ${year}`;
+            
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            // Add empty cells for days before the 1st
+            for (let i = 0; i < firstDayOfMonth; i++) {
+                calendarDaysEl.innerHTML += `<div></div>`;
+            }
+
+            // Add day cells
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayEl = document.createElement('div');
+                dayEl.textContent = i;
+                dayEl.classList.add('p-2', 'rounded-full', 'cursor-pointer', 'hover:bg-blue-500');
+
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                
+                // Highlight completed workout days
+                if (workoutLogs.includes(dateStr)) {
+                    dayEl.classList.add('bg-green-500', 'text-white', 'font-bold');
+                }
+
+                // Highlight today
+                const today = new Date();
+                if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                    dayEl.classList.add('border-2', 'border-blue-400');
+                }
+                
+                calendarDaysEl.appendChild(dayEl);
+            }
+
+            // Update workout count for the current month
+            const monthLogs = workoutLogs.filter(log => log.startsWith(`${year}-${String(month + 1).padStart(2, '0')}`)).length;
+            document.getElementById('workout-count').textContent = monthLogs;
+        }
+
+        document.getElementById('prev-month').addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        });
+
+        document.getElementById('next-month').addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        });
+
+        // --- Workout Plans ---
+        function renderWorkoutPlans() {
+            const listEl = document.getElementById('workout-plans-list');
+            listEl.innerHTML = '';
+            if (workoutPlans.length === 0) {
+                listEl.innerHTML = '<p class="text-gray-400 text-center">No workout plans yet. Create one!</p>';
+                return;
+            }
+
+            workoutPlans.forEach(plan => {
+                const planEl = document.createElement('div');
+                planEl.className = 'bg-gray-700 p-4 rounded-lg flex items-center justify-between';
+                planEl.innerHTML = `
+                    <div>
+                        <h3 class="font-bold text-lg">${plan.name}</h3>
+                        <p class="text-sm text-gray-400">${plan.exercises.length} exercises</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button data-id="${plan.id}" class="start-workout-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Start</button>
+                        <button data-id="${plan.id}" class="edit-plan-btn bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-2 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                        </button>
+                        <button data-id="${plan.id}" class="delete-plan-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
+                        </button>
+                    </div>
+                `;
+                listEl.appendChild(planEl);
+            });
+        }
+        
+        document.getElementById('create-new-plan-btn').addEventListener('click', () => {
+            currentPlanId = null;
+            document.getElementById('create-plan-title').textContent = 'Create Workout Plan';
+            document.getElementById('plan-name').value = '';
+            document.getElementById('exercises-in-plan').innerHTML = '';
+            addExerciseField(); // Add the first exercise field
+            navigateTo('create-plan-page');
+        });
+
+        document.getElementById('add-exercise-to-plan-btn').addEventListener('click', () => addExerciseField());
+
+        function addExerciseField(exercise = { name: '', sets: 3, reps: '10' }) {
+            const container = document.getElementById('exercises-in-plan');
+            const exerciseEl = document.createElement('div');
+            exerciseEl.className = 'exercise-entry bg-gray-600 p-3 rounded-lg space-y-2 relative';
+            
+            const exerciseId = `ex-${Date.now()}-${Math.random()}`;
+            exerciseEl.dataset.id = exerciseId;
+
+            exerciseEl.innerHTML = `
+                <button class="remove-exercise-btn absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center font-bold">&times;</button>
+                <input type="text" value="${exercise.name}" class="exercise-name w-full p-2 bg-gray-700 rounded border border-gray-500" placeholder="Exercise Name (e.g., Bench Press)">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="number" value="${exercise.sets}" class="exercise-sets w-full p-2 bg-gray-700 rounded border border-gray-500" placeholder="Sets">
+                    <input type="text" value="${exercise.reps}" class="exercise-reps w-full p-2 bg-gray-700 rounded border border-gray-500" placeholder="Reps (e.g., 8-12)">
+                </div>
+            `;
+            container.appendChild(exerciseEl);
+            exerciseEl.querySelector('.remove-exercise-btn').addEventListener('click', () => exerciseEl.remove());
+        }
+
+        document.getElementById('save-plan-btn').addEventListener('click', async () => {
+            const planName = document.getElementById('plan-name').value.trim();
+            if (!planName) {
+                showModal("Please enter a name for the workout plan.");
+                return;
+            }
+
+            const exerciseEntries = document.querySelectorAll('.exercise-entry');
+            if (exerciseEntries.length === 0) {
+                showModal("Please add at least one exercise to the plan.");
+                return;
+            }
+
+            const exercises = Array.from(exerciseEntries).map(entry => ({
+                name: entry.querySelector('.exercise-name').value.trim(),
+                sets: parseInt(entry.querySelector('.exercise-sets').value) || 0,
+                reps: entry.querySelector('.exercise-reps').value.trim()
+            })).filter(ex => ex.name); // Filter out exercises without a name
+
+            if (exercises.length === 0) {
+                showModal("Please ensure all added exercises have a name.");
+                return;
+            }
+
+            const planData = {
+                name: planName,
+                exercises: exercises,
+                userId: currentUserId,
+            };
+
+            showLoading();
+            try {
+                if (currentPlanId) {
+                    // Update existing plan
+                    const planRef = doc(db, `artifacts/${appId}/users/${currentUserId}/workout_plans`, currentPlanId);
+                    await updateDoc(planRef, planData);
+                    showModal("Plan updated successfully!");
+                } else {
+                    // Create new plan
+                    const collectionRef = collection(db, `artifacts/${appId}/users/${currentUserId}/workout_plans`);
+                    await addDoc(collectionRef, planData);
+                    showModal("Plan created successfully!");
+                }
+                navigateTo('workout-plans-page');
+            } catch (error) {
+                console.error("Error saving plan:", error);
+                showModal(`Error: ${error.message}`);
+            } finally {
+                hideLoading();
+            }
+        });
+
+        document.getElementById('workout-plans-list').addEventListener('click', async (e) => {
+            const target = e.target.closest('button');
+            if (!target) return;
+
+            const planId = target.dataset.id;
+            if (target.matches('.start-workout-btn')) {
+                startWorkout(planId);
+            } else if (target.matches('.edit-plan-btn')) {
+                editWorkoutPlan(planId);
+            } else if (target.matches('.delete-plan-btn')) {
+                if (confirm("Are you sure you want to delete this plan? This cannot be undone.")) {
+                    deleteWorkoutPlan(planId);
+                }
+            }
+        });
+
+        async function editWorkoutPlan(planId) {
+            const plan = workoutPlans.find(p => p.id === planId);
+            if (!plan) return;
+            
+            currentPlanId = planId;
+            document.getElementById('create-plan-title').textContent = 'Edit Workout Plan';
+            document.getElementById('plan-name').value = plan.name;
+            const exercisesContainer = document.getElementById('exercises-in-plan');
+            exercisesContainer.innerHTML = '';
+            plan.exercises.forEach(ex => addExerciseField(ex));
+            
+            navigateTo('create-plan-page');
+        }
+
+        async function deleteWorkoutPlan(planId) {
+            showLoading();
+            try {
+                const planRef = doc(db, `artifacts/${appId}/users/${currentUserId}/workout_plans`, planId);
+                await deleteDoc(planRef);
+                showModal("Plan deleted.");
+                // The onSnapshot listener will automatically re-render the list
+            } catch (error) {
+                console.error("Error deleting plan:", error);
+                showModal(`Error: ${error.message}`);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // --- Active Workout ---
+        let stopwatchInterval;
+        let stopwatchTime = 0;
+
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${h}:${m}:${s}`;
+        }
+
+        function updateStopwatchDisplay() {
+            document.getElementById('stopwatch-display').textContent = formatTime(stopwatchTime);
+        }
+
+        document.getElementById('stopwatch-start').addEventListener('click', () => {
+            clearInterval(stopwatchInterval);
+            stopwatchInterval = setInterval(() => {
+                stopwatchTime++;
+                updateStopwatchDisplay();
+            }, 1000);
+        });
+        
+        document.getElementById('stopwatch-pause').addEventListener('click', () => {
+            clearInterval(stopwatchInterval);
+        });
+
+        document.getElementById('stopwatch-reset').addEventListener('click', () => {
+            clearInterval(stopwatchInterval);
+            stopwatchTime = 0;
+            updateStopwatchDisplay();
+        });
+
+        function startWorkout(planId) {
+            const plan = workoutPlans.find(p => p.id === planId);
+            if (!plan) {
+                showModal("Could not find workout plan.");
+                return;
+            }
+            
+            currentPlanId = planId;
+            document.getElementById('active-workout-name').textContent = plan.name;
+            const container = document.getElementById('active-workout-exercises');
+            container.innerHTML = '';
+
+            plan.exercises.forEach((ex, index) => {
+                const exerciseEl = document.createElement('div');
+                exerciseEl.className = 'bg-gray-700 p-4 rounded-lg';
+                exerciseEl.innerHTML = `<h3 class="text-lg font-bold mb-3">${ex.name} <span class="text-sm font-normal text-gray-400">(${ex.sets} sets x ${ex.reps} reps)</span></h3>`;
+                
+                const setsGrid = document.createElement('div');
+                setsGrid.className = 'grid grid-cols-1 gap-3';
+
+                for (let i = 1; i <= ex.sets; i++) {
+                    const setEl = document.createElement('div');
+                    setEl.className = 'grid grid-cols-3 gap-2 items-center';
+                    setEl.innerHTML = `
+                        <span class="font-semibold text-gray-300">Set ${i}</span>
+                        <input type="number" class="w-full p-2 bg-gray-600 rounded border border-gray-500 workout-input" placeholder="Weight">
+                        <input type="number" class="w-full p-2 bg-gray-600 rounded border border-gray-500 workout-input" placeholder="Reps">
+                    `;
+                    setsGrid.appendChild(setEl);
+                }
+                exerciseEl.appendChild(setsGrid);
+                container.appendChild(exerciseEl);
+            });
+            
+            // Reset and start stopwatch
+            stopwatchTime = 0;
+            updateStopwatchDisplay();
+            document.getElementById('stopwatch-start').click();
+
+            // Add event listener to check if workout can be completed
+            container.querySelectorAll('.workout-input').forEach(input => {
+                input.addEventListener('input', checkWorkoutCompletion);
+            });
+            checkWorkoutCompletion(); // Initial check
+
+            navigateTo('active-workout-page');
+        }
+
+        function checkWorkoutCompletion() {
+            const inputs = document.querySelectorAll('#active-workout-exercises .workout-input');
+            const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+            document.getElementById('complete-workout-btn').disabled = !allFilled;
+        }
+
+        document.getElementById('complete-workout-btn').addEventListener('click', async () => {
+            if (!confirm("Are you sure you want to complete this workout?")) return;
+
+            showLoading();
+            const today = new Date();
+            const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            
+            const plan = workoutPlans.find(p => p.id === currentPlanId);
+            
+            const logData = {
+                planId: currentPlanId,
+                planName: plan.name,
+                completedAt: today,
+                date: dateStr,
+                durationSeconds: stopwatchTime,
+                userId: currentUserId,
+                // In a real app, you would collect the actual performance data here
+            };
+
+            try {
+                const logCollectionRef = collection(db, `artifacts/${appId}/users/${currentUserId}/workout_logs`);
+                await addDoc(logCollectionRef, logData);
+                
+                // Stop stopwatch
+                clearInterval(stopwatchInterval);
+
+                showModal("Great Work!!! Workout logged successfully.");
+                navigateTo('dashboard-page');
+            } catch (error) {
+                console.error("Error logging workout:", error);
+                showModal(`Error: ${error.message}`);
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // --- Firestore Listeners ---
+        let workoutLogUnsubscribe = null;
+        let workoutPlanUnsubscribe = null;
+
+        function setupListeners() {
+            // Detach existing listeners if they exist
+            if (workoutLogUnsubscribe) workoutLogUnsubscribe();
+            if (workoutPlanUnsubscribe) workoutPlanUnsubscribe();
+
+            if (!currentUserId) return;
+
+            // Listener for workout logs (for calendar)
+            const logQuery = query(collection(db, `artifacts/${appId}/users/${currentUserId}/workout_logs`));
+            workoutLogUnsubscribe = onSnapshot(logQuery, (snapshot) => {
+                workoutLogs = snapshot.docs.map(doc => doc.data().date);
+                renderCalendar();
+            }, (error) => {
+                console.error("Error fetching workout logs:", error);
+            });
+
+            // Listener for workout plans
+            const planQuery = query(collection(db, `artifacts/${appId}/users/${currentUserId}/workout_plans`));
+            workoutPlanUnsubscribe = onSnapshot(planQuery, (snapshot) => {
+                workoutPlans = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderWorkoutPlans();
+            }, (error) => {
+                console.error("Error fetching workout plans:", error);
+            });
+        }
+        
+        // --- Modal close button ---
+        document.getElementById('modal-close-btn').addEventListener('click', () => {
+            document.getElementById('custom-modal').classList.add('hidden');
+        });
+
+        // --- App Initialization ---
+        window.onload = () => {
+            initializeAuth();
+        };
+
+    </script>
+</body>
+</html>
