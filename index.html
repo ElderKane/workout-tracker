@@ -266,7 +266,7 @@
             apiKey: "AIzaSyB2vMK0bKqDVjrwpFOqZtLrI8xEE9-F9xc",
             authDomain: "workout-tracker-6234f.firebaseapp.com",
             projectId: "workout-tracker-6234f",
-            storageBucket: "workout-tracker-6234f.firebasestorage.app",
+            storageBucket: "workout-tracker-6234f.appspot.com",
             messagingSenderId: "870347402147",
             appId: "1:870347402147:web:e22f664f4df086fd1f0816",
             measurementId: "G-MLE13JHZN1"
@@ -276,6 +276,11 @@
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
+        
+        // --- NEW DIAGNOSTIC LINE ---
+        // This will print the project ID to your browser's console.
+        console.log("App connected to Firebase project:", app.options.projectId);
+
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
