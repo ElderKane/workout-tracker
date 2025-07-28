@@ -29,12 +29,10 @@
 
     <div id="app-container" class="max-w-md mx-auto min-h-screen bg-gray-800 shadow-lg relative">
 
-        <!-- Loading Spinner -->
         <div id="loading-spinner" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
             <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
         </div>
 
-        <!-- Custom Modal -->
         <div id="custom-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
             <div class="bg-gray-700 rounded-lg p-6 w-11/12 max-w-sm text-center shadow-xl">
                 <p id="modal-message" class="mb-4 text-lg"></p>
@@ -50,8 +48,24 @@
                 </div>
             </div>
         </div>
+        
+        <div id="exercise-select-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+            <div class="bg-gray-700 rounded-lg p-4 w-11/12 max-w-md h-4/5 flex flex-col shadow-xl">
+                <h2 class="text-xl font-bold mb-4 text-blue-400">Select Exercise</h2>
+                <div class="flex gap-2 mb-4">
+                    <input id="exercise-search-input" type="text" placeholder="Search..." class="flex-grow p-2 bg-gray-800 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <select id="exercise-select-filter" class="p-2 bg-gray-800 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </select>
+                </div>
+                <div id="exercise-select-list" class="flex-grow overflow-y-auto space-y-2 pr-2">
+                    </div>
+                <div class="flex gap-4 mt-4">
+                     <button id="exercise-select-new-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full">Create New</button>
+                    <button id="exercise-select-close-btn" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded w-full">Close</button>
+                </div>
+            </div>
+        </div>
 
-        <!-- Auth Page -->
         <div id="auth-page" class="page active p-6">
             <div id="login-view">
                 <h1 class="text-3xl font-bold mb-6 text-center text-blue-400">Sign In</h1>
@@ -85,9 +99,7 @@
             </div>
         </div>
 
-        <!-- Main App Content (hidden until logged in) -->
         <div id="main-app" class="hidden">
-            <!-- Dashboard Page -->
             <div id="dashboard-page" class="page p-4">
                 <div class="flex justify-between items-center mb-4">
                     <h1 class="text-2xl font-bold text-blue-400">Dashboard</h1>
@@ -107,57 +119,59 @@
                 <p class="text-center text-gray-400 mb-4">Workouts this month: <span id="workout-count" class="font-bold text-white">0</span></p>
             </div>
 
-            <!-- Profile Page -->
             <div id="profile-page" class="page p-6 space-y-6">
                  <h1 class="text-2xl font-bold text-blue-400">Profile</h1>
                  <div class="flex flex-col items-center space-y-4">
-                    <img id="profile-photo" src="https://placehold.co/128x128/374151/e5e7eb?text=Avatar" class="w-32 h-32 rounded-full object-cover border-4 border-blue-500">
-                    <input type="file" id="photo-upload" class="hidden" accept="image/*">
-                    <button id="change-photo-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Change Photo</button>
-                </div>
-                <div class="space-y-4">
-                    <div>
-                        <label for="profile-fullname" class="block text-sm font-medium text-gray-400">Full Name</label>
-                        <input type="text" id="profile-fullname" class="mt-1 w-full p-3 bg-gray-700 rounded border border-gray-600">
-                    </div>
-                    <div>
-                        <label for="profile-username" class="block text-sm font-medium text-gray-400">Username</label>
-                        <input type="text" id="profile-username" class="mt-1 w-full p-3 bg-gray-600 rounded border border-gray-500 text-gray-400" readonly>
-                    </div>
-                    <div>
-                        <label for="profile-email" class="block text-sm font-medium text-gray-400">Email</label>
-                        <input type="email" id="profile-email" class="mt-1 w-full p-3 bg-gray-600 rounded border border-gray-500 text-gray-400" readonly>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                           <label for="profile-birthdate" class="block text-sm font-medium text-gray-400">Birth Date</label>
-                           <input type="date" id="profile-birthdate" class="mt-1 w-full p-3 bg-gray-700 rounded border border-gray-600">
+                     <img id="profile-photo" src="https://placehold.co/128x128/374151/e5e7eb?text=Avatar" class="w-32 h-32 rounded-full object-cover border-4 border-blue-500">
+                     <input type="file" id="photo-upload" class="hidden" accept="image/*">
+                     <button id="change-photo-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Change Photo</button>
+                 </div>
+                 <div class="space-y-4">
+                     <div>
+                         <label for="profile-fullname" class="block text-sm font-medium text-gray-400">Full Name</label>
+                         <input type="text" id="profile-fullname" class="mt-1 w-full p-3 bg-gray-700 rounded border border-gray-600">
+                     </div>
+                     <div>
+                         <label for="profile-username" class="block text-sm font-medium text-gray-400">Username</label>
+                         <input type="text" id="profile-username" class="mt-1 w-full p-3 bg-gray-600 rounded border border-gray-500 text-gray-400" readonly>
+                     </div>
+                     <div>
+                         <label for="profile-email" class="block text-sm font-medium text-gray-400">Email</label>
+                         <input type="email" id="profile-email" class="mt-1 w-full p-3 bg-gray-600 rounded border border-gray-500 text-gray-400" readonly>
+                     </div>
+                     <div class="grid grid-cols-2 gap-4">
+                         <div>
+                            <label class="block text-sm font-medium text-gray-400">Birth Date</label>
+                            <div class="grid grid-cols-3 gap-2 mt-1">
+                                <select id="profile-birth-year" class="w-full p-3 bg-gray-700 rounded border border-gray-600" aria-label="Year of birth"></select>
+                                <select id="profile-birth-month" class="w-full p-3 bg-gray-700 rounded border border-gray-600" aria-label="Month of birth"></select>
+                                <select id="profile-birth-day" class="w-full p-3 bg-gray-700 rounded border border-gray-600" aria-label="Day of birth"></select>
+                            </div>
                         </div>
                          <div>
-                           <label for="profile-age" class="block text-sm font-medium text-gray-400">Age</label>
-                           <input type="text" id="profile-age" class="mt-1 w-full p-3 bg-gray-600 rounded border border-gray-500 text-gray-400" readonly>
-                        </div>
-                    </div>
-                     <div class="grid grid-cols-2 gap-4 items-end">
-                        <div>
-                           <label for="profile-weight" class="block text-sm font-medium text-gray-400">Weight</label>
-                           <input type="number" id="profile-weight" class="mt-1 w-full p-3 bg-gray-700 rounded border border-gray-600">
-                        </div>
+                             <label for="profile-age" class="block text-sm font-medium text-gray-400">Age</label>
+                             <input type="text" id="profile-age" class="mt-1 w-full p-3 bg-gray-600 rounded border border-gray-500 text-gray-400" readonly>
+                         </div>
+                     </div>
+                      <div class="grid grid-cols-2 gap-4 items-end">
                          <div>
-                            <select id="profile-units" class="w-full p-3 bg-gray-700 rounded border border-gray-600">
-                                <option value="lbs">lbs</option>
-                                <option value="kg">kg</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="space-y-4 pt-4 border-t border-gray-700">
-                    <button id="save-profile-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Save Profile</button>
-                    <button id="change-password-btn" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 rounded-lg">Change Password</button>
-                </div>
+                             <label for="profile-weight" class="block text-sm font-medium text-gray-400">Weight</label>
+                             <input type="number" id="profile-weight" class="mt-1 w-full p-3 bg-gray-700 rounded border border-gray-600">
+                         </div>
+                          <div>
+                             <select id="profile-units" class="w-full p-3 bg-gray-700 rounded border border-gray-600">
+                                 <option value="lbs">lbs</option>
+                                 <option value="kg">kg</option>
+                             </select>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="space-y-4 pt-4 border-t border-gray-700">
+                     <button id="save-profile-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Save Profile</button>
+                     <button id="change-password-btn" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 rounded-lg">Change Password</button>
+                 </div>
             </div>
 
-            <!-- Exercise Database Page -->
             <div id="exercise-db-page" class="page p-4">
                 <h1 class="text-2xl font-bold mb-4 text-blue-400">Exercise Database</h1>
                 <div class="flex gap-2 mb-4">
@@ -182,33 +196,28 @@
                 <button id="add-new-exercise-db-btn" class="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Add New Exercise</button>
             </div>
 
-            <!-- Workout Plans Page -->
             <div id="workout-plans-page" class="page p-4">
                 <h1 class="text-2xl font-bold mb-4 text-blue-400">Workout Plans</h1>
                 <div id="workout-plans-list" class="space-y-3"></div>
                 <button id="create-new-plan-btn" class="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Create New Plan</button>
             </div>
             
-            <!-- Create/Edit Workout Plan Page -->
             <div id="create-plan-page" class="page p-4">
                 <h1 id="create-plan-title" class="text-2xl font-bold mb-4 text-blue-400">Create Workout Plan</h1>
                 <input type="text" id="plan-name" placeholder="Workout Plan Name (e.g., 3-Day Split)" class="w-full p-3 bg-gray-700 rounded border border-gray-600 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 
                 <div id="workout-days-container" class="space-y-6 mb-4">
-                    <!-- Workout days will be added here -->
-                </div>
+                    </div>
 
                 <button id="add-workout-day-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg mb-4">Add Workout Day</button>
                 <button id="save-plan-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Save Plan</button>
             </div>
 
-            <!-- Select Workout Day Page -->
             <div id="select-workout-day-page" class="page p-4">
                 <h1 id="select-day-title" class="text-2xl font-bold mb-4 text-blue-400">Select a Day</h1>
                 <div id="select-day-list" class="space-y-3"></div>
             </div>
 
-            <!-- Active Workout Page -->
             <div id="active-workout-page" class="page">
                 <div id="stopwatch" class="sticky top-0 bg-gray-900 p-4 text-center z-10 shadow-lg">
                     <p class="text-5xl font-mono" id="stopwatch-display">00:00:00</p>
@@ -216,19 +225,16 @@
                 <div class="p-4">
                     <h1 id="active-workout-name" class="text-2xl font-bold mb-4 text-blue-400"></h1>
                     <div id="active-workout-exercises" class="space-y-6">
-                        <!-- Active exercises will be rendered here -->
-                    </div>
+                        </div>
                     <button id="complete-workout-btn" class="mt-8 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg disabled:bg-gray-500 disabled:cursor-not-allowed">Mark as Complete</button>
                 </div>
             </div>
 
-            <!-- Completion Splash Page -->
             <div id="completion-page" class="page flex flex-col items-center justify-center h-screen">
                 <h1 class="text-5xl font-bold text-green-400 mb-8">Great Work!!!</h1>
                 <button id="back-to-dashboard-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg">Back to Dashboard</button>
             </div>
 
-            <!-- Bottom Navigation -->
             <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-gray-900 border-t border-gray-700 flex justify-around">
                 <button data-page="dashboard-page" class="nav-btn p-3 flex-1 text-center text-gray-400 hover:bg-gray-700 hover:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
@@ -294,6 +300,7 @@
         let currentUser = null;
         let currentUserId = null;
         let currentPlanId = null; 
+        let exerciseTargetInput = null;
         let activeWorkout = { planId: null, dayIndex: null };
         let workoutLogs = []; 
         let workoutPlans = [];
@@ -558,6 +565,76 @@
         }
 
         // --- Profile Page ---
+        function setupBirthDateSelectors() {
+            const yearEl = document.getElementById('profile-birth-year');
+            const monthEl = document.getElementById('profile-birth-month');
+            const dayEl = document.getElementById('profile-birth-day');
+
+            // Populate years
+            const currentYear = new Date().getFullYear();
+            yearEl.innerHTML = '<option value="">Year</option>';
+            for (let y = currentYear; y >= currentYear - 100; y--) {
+                yearEl.innerHTML += `<option value="${y}">${y}</option>`;
+            }
+
+            // Populate months
+            monthEl.innerHTML = '<option value="">Month</option>';
+            for (let m = 1; m <= 12; m++) {
+                const monthName = new Date(currentYear, m - 1, 1).toLocaleString('default', { month: 'long' });
+                monthEl.innerHTML += `<option value="${String(m).padStart(2, '0')}">${monthName}</option>`;
+            }
+
+            // Populate days
+            dayEl.innerHTML = '<option value="">Day</option>';
+            for (let d = 1; d <= 31; d++) {
+                dayEl.innerHTML += `<option value="${String(d).padStart(2, '0')}">${d}</option>`;
+            }
+            
+            function updateDays() {
+                const year = parseInt(yearEl.value);
+                const month = parseInt(monthEl.value);
+                const currentDay = dayEl.value;
+                
+                dayEl.innerHTML = '<option value="">Day</option>';
+                if (year && month) {
+                    const daysInMonth = new Date(year, month, 0).getDate();
+                    for (let d = 1; d <= daysInMonth; d++) {
+                        dayEl.innerHTML += `<option value="${String(d).padStart(2, '0')}">${d}</option>`;
+                    }
+                } else {
+                     for (let d = 1; d <= 31; d++) {
+                        dayEl.innerHTML += `<option value="${String(d).padStart(2, '0')}">${d}</option>`;
+                    }
+                }
+                if (Array.from(dayEl.options).some(opt => opt.value === currentDay)) {
+                    dayEl.value = currentDay;
+                }
+            }
+
+            function calculateAge() {
+                const year = parseInt(yearEl.value);
+                const month = parseInt(monthEl.value);
+                const day = parseInt(dayEl.value);
+                
+                if (year && month && day) {
+                    const birthDate = new Date(year, month - 1, day);
+                    const today = new Date();
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    document.getElementById('profile-age').value = age >= 0 ? age : '';
+                } else {
+                    document.getElementById('profile-age').value = '';
+                }
+            }
+
+            yearEl.addEventListener('change', () => { updateDays(); calculateAge(); });
+            monthEl.addEventListener('change', () => { updateDays(); calculateAge(); });
+            dayEl.addEventListener('change', calculateAge);
+        }
+
         async function fetchUserProfile() {
             const userDocRef = doc(db, `artifacts/${appId}/users`, currentUserId);
             const docSnap = await getDoc(userDocRef);
@@ -567,31 +644,26 @@
                 document.getElementById('profile-username').value = data.username || '';
                 document.getElementById('dashboard-username').textContent = data.username || '';
                 document.getElementById('profile-email').value = data.email || '';
-                document.getElementById('profile-birthdate').value = data.birthDate || '';
+                
                 if (data.birthDate) {
-                    const age = new Date().getFullYear() - new Date(data.birthDate).getFullYear();
-                    document.getElementById('profile-age').value = age;
+                    const [year, month, day] = data.birthDate.split('-');
+                    document.getElementById('profile-birth-year').value = year;
+                    document.getElementById('profile-birth-month').value = month;
+                    document.getElementById('profile-birth-month').dispatchEvent(new Event('change'));
+                    document.getElementById('profile-birth-day').value = day;
+                    document.getElementById('profile-birth-day').dispatchEvent(new Event('change'));
+                } else {
+                    document.getElementById('profile-birth-year').value = '';
+                    document.getElementById('profile-birth-month').value = '';
+                    document.getElementById('profile-birth-day').value = '';
+                    document.getElementById('profile-age').value = '';
                 }
+                
                 document.getElementById('profile-weight').value = data.weight || '';
                 document.getElementById('profile-units').value = data.unitPreference || 'lbs';
                 document.getElementById('profile-photo').src = data.photoURL || 'https://placehold.co/128x128/374151/e5e7eb?text=Avatar';
             }
         }
-
-        document.getElementById('profile-birthdate').addEventListener('change', (e) => {
-            if(e.target.value) {
-                const birthDate = new Date(e.target.value);
-                const today = new Date();
-                let age = today.getFullYear() - birthDate.getFullYear();
-                const m = today.getMonth() - birthDate.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                    age--;
-                }
-                document.getElementById('profile-age').value = age;
-            } else {
-                document.getElementById('profile-age').value = '';
-            }
-        });
 
         document.getElementById('change-photo-btn').addEventListener('click', () => document.getElementById('photo-upload').click());
 
@@ -624,10 +696,18 @@
                 const firstName = nameParts[0] || '';
                 const lastName = nameParts.slice(1).join(' ') || '';
 
+                const year = document.getElementById('profile-birth-year').value;
+                const month = document.getElementById('profile-birth-month').value;
+                const day = document.getElementById('profile-birth-day').value;
+                let birthDate = '';
+                if (year && month && day) {
+                    birthDate = `${year}-${month}-${day}`;
+                }
+
                 const userDocRef = doc(db, `artifacts/${appId}/users`, currentUserId);
                 await updateDoc(userDocRef, {
                     fullName, firstName, lastName,
-                    birthDate: document.getElementById('profile-birthdate').value,
+                    birthDate: birthDate,
                     weight: document.getElementById('profile-weight').value,
                     unitPreference: document.getElementById('profile-units').value,
                 });
@@ -837,6 +917,75 @@
             });
         }
 
+        // --- Exercise Selection Modal ---
+        function openExerciseSelector() {
+            const modal = document.getElementById('exercise-select-modal');
+            const filterEl = document.getElementById('exercise-select-filter');
+            const searchInput = document.getElementById('exercise-search-input');
+
+            // Populate filter dropdown if not already populated
+            if (filterEl.options.length <= 1) {
+                filterEl.innerHTML = '<option value="all">All Types</option>';
+                exerciseTypes.forEach(type => {
+                    filterEl.innerHTML += `<option value="${type}">${type}</option>`;
+                });
+            }
+            
+            // Reset fields and render
+            searchInput.value = '';
+            filterEl.value = 'all';
+            renderExerciseSelectionList();
+            
+            modal.classList.remove('hidden');
+        }
+
+        function closeExerciseSelector() {
+            document.getElementById('exercise-select-modal').classList.add('hidden');
+            exerciseTargetInput = null;
+        }
+
+        function renderExerciseSelectionList() {
+            const listEl = document.getElementById('exercise-select-list');
+            const searchTerm = document.getElementById('exercise-search-input').value.toLowerCase();
+            const filterType = document.getElementById('exercise-select-filter').value;
+
+            listEl.innerHTML = '';
+
+            let filteredExercises = allExercises;
+
+            if (filterType !== 'all') {
+                filteredExercises = filteredExercises.filter(ex => ex.type === filterType);
+            }
+            if (searchTerm) {
+                filteredExercises = filteredExercises.filter(ex => ex.name.toLowerCase().includes(searchTerm));
+            }
+            
+            filteredExercises.sort((a, b) => a.name.localeCompare(b.name));
+
+            if (filteredExercises.length === 0) {
+                listEl.innerHTML = '<p class="text-gray-400 text-center">No exercises found. Try creating one.</p>';
+                return;
+            }
+
+            filteredExercises.forEach(ex => {
+                const itemEl = document.createElement('button');
+                itemEl.className = 'w-full text-left p-3 bg-gray-800 hover:bg-gray-600 rounded-lg transition-colors duration-200';
+                itemEl.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-semibold">${ex.name}</span>
+                        <span class="text-sm text-blue-400">${ex.type}</span>
+                    </div>
+                `;
+                itemEl.addEventListener('click', () => {
+                    if (exerciseTargetInput) {
+                        exerciseTargetInput.value = ex.name;
+                    }
+                    closeExerciseSelector();
+                });
+                listEl.appendChild(itemEl);
+            });
+        }
+
         // --- Workout Plans ---
         function renderWorkoutPlans() {
             const listEl = document.getElementById('workout-plans-list');
@@ -967,7 +1116,7 @@
             `;
             groupsContainer.appendChild(groupEl);
             groupEl.querySelector('.remove-group-btn').addEventListener('click', () => groupEl.remove());
-            groupEl.querySelector('.add-exercise-to-group-btn').addEventListener('click', (e) => addExerciseToGroupField(e.target.nextElementSibling));
+            groupEl.querySelector('.add-exercise-to-group-btn').addEventListener('click', (e) => addExerciseToGroupField(e.target.previousElementSibling));
             
             const exercisesContainer = groupEl.querySelector('.exercises-in-group');
             if (group.exercises.length === 0) {
@@ -982,7 +1131,10 @@
             exerciseEl.className = 'exercise-entry bg-gray-700 p-3 rounded-lg space-y-2 relative';
             exerciseEl.innerHTML = `
                 <button class="remove-exercise-btn absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center font-bold">&times;</button>
-                <input type="text" value="${exercise.name || ''}" class="exercise-name w-full p-2 bg-gray-800 rounded border border-gray-600" placeholder="Exercise Name">
+                <div class="flex gap-2">
+                    <input type="text" value="${exercise.name || ''}" class="exercise-name w-full p-2 bg-gray-800 rounded border border-gray-600" placeholder="Exercise Name">
+                    <button class="select-exercise-btn bg-blue-500 hover:bg-blue-600 text-white font-bold px-3 rounded-lg">Select</button>
+                </div>
                 <div class="grid grid-cols-2 gap-2">
                     <input type="number" value="${exercise.sets || 3}" class="exercise-sets w-full p-2 bg-gray-800 rounded border border-gray-600" placeholder="Sets">
                     <input type="text" value="${exercise.reps || '8-12'}" class="exercise-reps w-full p-2 bg-gray-800 rounded border border-gray-600" placeholder="Reps (e.g., 8-12)">
@@ -991,6 +1143,12 @@
             `;
             exercisesContainer.appendChild(exerciseEl);
             exerciseEl.querySelector('.remove-exercise-btn').addEventListener('click', () => exerciseEl.remove());
+            
+            const nameInput = exerciseEl.querySelector('.exercise-name');
+            exerciseEl.querySelector('.select-exercise-btn').addEventListener('click', () => {
+                exerciseTargetInput = nameInput;
+                openExerciseSelector();
+            });
         }
 
         document.getElementById('save-plan-btn').addEventListener('click', async () => {
@@ -1213,10 +1371,24 @@
         });
 
         // --- App Initialization ---
+        
+        // Event listeners for the new exercise selection modal
+        document.getElementById('exercise-select-close-btn').addEventListener('click', closeExerciseSelector);
+        document.getElementById('exercise-search-input').addEventListener('input', renderExerciseSelectionList);
+        document.getElementById('exercise-select-filter').addEventListener('change', renderExerciseSelectionList);
+        document.getElementById('exercise-select-new-btn').addEventListener('click', async () => {
+            closeExerciseSelector();
+            const newExercise = await promptForNewExercise();
+            if (newExercise && exerciseTargetInput) {
+                exerciseTargetInput.value = newExercise.name;
+            }
+        });
+
         window.onload = () => {
+            setupBirthDateSelectors();
             initializeAuth();
         };
 
     </script>
 </body>
-</ht
+</html>
