@@ -218,13 +218,33 @@
                 <div id="select-day-list" class="space-y-3"></div>
             </div>
 
-            <div id="active-workout-page" class="page">
-                <div id="stopwatch" class="sticky top-0 bg-gray-900 p-4 text-center z-10 shadow-lg">
-                    <p class="text-5xl font-mono" id="stopwatch-display">00:00:00</p>
+            <div id="active-workout-page" class="page flex flex-col">
+                <div id="stopwatch-container" class="sticky top-0 bg-gray-900 p-4 z-10 shadow-lg flex flex-col items-center gap-2">
+                    <div class="w-full flex justify-around items-baseline text-center">
+                        <div>
+                            <span class="text-xs text-gray-400">LAP</span>
+                            <p id="lap-time-display" class="text-2xl font-mono">00:00.00</p>
+                        </div>
+                        <div class="w-48">
+                            <span class="text-sm text-gray-400">TOTAL</span>
+                            <p id="main-time-display" class="text-5xl font-mono">00:00.00</p>
+                        </div>
+                        <div>
+                             <span class="text-xs text-gray-400">LAP #</span>
+                            <p id="lap-counter" class="text-2xl font-mono">0</p>
+                        </div>
+                    </div>
+                    <div id="stopwatch-controls" class="flex gap-4">
+                        <button id="reset-lap-btn" class="w-24 h-10 rounded-lg bg-gray-600 text-md font-semibold flex items-center justify-center transition-colors">Reset</button>
+                        <button id="start-stop-btn" class="w-24 h-10 rounded-lg bg-green-600 text-md font-semibold flex items-center justify-center transition-colors">Start</button>
+                    </div>
+                    <div id="laps-list-container" class="w-full max-h-24 overflow-y-auto text-sm font-mono mt-2 bg-gray-800 rounded-lg p-2">
+                    </div>
                 </div>
-                <div class="p-4">
-                    <h1 id="active-workout-name" class="text-2xl font-bold mb-4 text-blue-400"></h1>
-                    <div id="active-workout-exercises" class="space-y-6">
+
+                <div class="flex-grow p-4">
+                    <h1 id="active-workout-name" class="text-2xl font-bold mb-4 text-blue-400 text-center"></h1>
+                    <div id="active-workout-exercises" class="space-y-4">
                         </div>
                     <button id="complete-workout-btn" class="mt-8 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg disabled:bg-gray-500 disabled:cursor-not-allowed">Mark as Complete</button>
                 </div>
@@ -308,6 +328,15 @@
         let userExercises = [];
         let exerciseHistory = {};
         let listeners = [];
+        let stopwatch = {
+            state: 'stopped',
+            startTime: 0,
+            elapsed: 0,
+            lapStart: 0,
+            laps: [],
+            animationFrameId: null
+        };
+
 
         // --- UI Elements ---
         const pages = document.querySelectorAll('.page');
@@ -1104,7 +1133,7 @@
             groupEl.className = 'exercise-group bg-gray-600 p-3 rounded-lg space-y-3';
             groupEl.innerHTML = `
                 <div class="flex justify-between items-center">
-                    <h3 class="text-md font-semibold text-blue-300">Exercise Group (Superset)</h3>
+                    <h3 class="text-md font-semibold text-blue-300">Exercise Group</h3>
                     <button class="remove-group-btn bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center font-bold">&times;</button>
                 </div>
                 <div class="exercises-in-group space-y-3"></div>
@@ -1216,10 +1245,7 @@
             return await promptForNewExercise(name);
         }
 
-        // --- Active Workout ---
-        let stopwatchInterval;
-        let stopwatchTime = 0;
-
+        // --- Active Workout & Stopwatch ---
         function showDaySelection(planId) {
             const plan = workoutPlans.find(p => p.id === planId);
             if (!plan || !plan.days || plan.days.length === 0) return showModal("This plan has no workout days.");
@@ -1250,14 +1276,22 @@
             const container = document.getElementById('active-workout-exercises');
             container.innerHTML = '';
 
-            day.groups.forEach((group) => {
+            day.groups.forEach((group, groupIndex) => {
+                const groupEl = document.createElement('div');
+                groupEl.className = 'bg-gray-700 p-4 rounded-lg space-y-4';
+                
+                const groupTitle = document.createElement('h3');
+                groupTitle.className = 'text-lg font-bold text-blue-300 border-b border-gray-600 pb-2';
+                groupTitle.textContent = `Group ${groupIndex + 1}`;
+                groupEl.appendChild(groupTitle);
+                
                 group.exercises.forEach((ex) => {
                     const exerciseEl = document.createElement('div');
-                    exerciseEl.className = 'bg-gray-700 p-4 rounded-lg';
+                    exerciseEl.className = 'bg-gray-800 p-3 rounded-lg';
                     const history = exerciseHistory[ex.exerciseId];
                     const lastPerf = history ? `Last: ${history.lastWeight || 0} x ${history.lastReps || 0}` : 'No history';
                     const tempoText = ex.tempo ? `| Tempo: ${ex.tempo}` : '';
-                    exerciseEl.innerHTML = `<h3 class="text-lg font-bold mb-1">${ex.name}</h3><p class="text-sm text-gray-400 mb-3">${ex.sets} sets x ${ex.reps} reps ${tempoText} | <span class="text-blue-400">${lastPerf}</span></p>`;
+                    exerciseEl.innerHTML = `<h4 class="text-md font-bold mb-2">${ex.name}</h4><p class="text-xs text-gray-400 mb-3">${ex.sets} sets x ${ex.reps} reps ${tempoText} | <span class="text-blue-400">${lastPerf}</span></p>`;
                     
                     const setsGrid = document.createElement('div');
                     setsGrid.className = 'grid grid-cols-1 gap-3';
@@ -1265,33 +1299,106 @@
                     for (let i = 1; i <= ex.sets; i++) {
                         const setEl = document.createElement('div');
                         setEl.className = 'grid grid-cols-3 gap-2 items-center';
-                        setEl.innerHTML = `<span class="font-semibold text-gray-300">Set ${i}</span><input type="number" class="w-full p-2 bg-gray-600 rounded border border-gray-500 workout-input workout-weight" placeholder="Weight"><input type="number" class="w-full p-2 bg-gray-600 rounded border border-gray-500 workout-input workout-reps" placeholder="Reps">`;
+                        setEl.innerHTML = `<span class="font-semibold text-gray-300 text-sm">Set ${i}</span><input type="number" class="w-full p-2 bg-gray-600 rounded border border-gray-500 workout-input workout-weight" placeholder="Weight"><input type="number" class="w-full p-2 bg-gray-600 rounded border border-gray-500 workout-input workout-reps" placeholder="Reps">`;
                         setsGrid.appendChild(setEl);
                     }
                     exerciseEl.appendChild(setsGrid);
-                    container.appendChild(exerciseEl);
+                    groupEl.appendChild(exerciseEl);
                 });
+                
+                const restEl = document.createElement('p');
+                restEl.className = 'text-center text-xs text-gray-400 font-semibold pt-2';
+                restEl.textContent = `Rest After Group: ${group.rest} seconds`;
+                groupEl.appendChild(restEl);
+
+                container.appendChild(groupEl);
             });
             
-            stopwatchTime = 0;
-            updateStopwatchDisplay();
-            clearInterval(stopwatchInterval);
-            stopwatchInterval = setInterval(() => {
-                stopwatchTime++;
-                updateStopwatchDisplay();
-            }, 1000);
-
+            resetStopwatch();
             container.querySelectorAll('.workout-input').forEach(input => input.addEventListener('input', checkWorkoutCompletion));
             checkWorkoutCompletion();
             navigateTo('active-workout-page');
         }
-
-        function updateStopwatchDisplay() {
-            const h = Math.floor(stopwatchTime / 3600).toString().padStart(2, '0');
-            const m = Math.floor((stopwatchTime % 3600) / 60).toString().padStart(2, '0');
-            const s = (stopwatchTime % 60).toString().padStart(2, '0');
-            document.getElementById('stopwatch-display').textContent = `${h}:${m}:${s}`;
+        
+        function formatTime(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+            const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+            const milliseconds = Math.floor((ms % 1000) / 10).toString().padStart(2, '0');
+            return `${minutes}:${seconds}.${milliseconds}`;
         }
+
+        function updateStopwatchUI() {
+            const startStopBtn = document.getElementById('start-stop-btn');
+            const resetLapBtn = document.getElementById('reset-lap-btn');
+
+            if (stopwatch.state === 'stopped') {
+                startStopBtn.textContent = 'Start';
+                startStopBtn.className = 'w-24 h-10 rounded-lg bg-green-600 hover:bg-green-700 text-md font-semibold flex items-center justify-center transition-colors';
+                resetLapBtn.textContent = 'Reset';
+            } else { // running
+                startStopBtn.textContent = 'Stop';
+                startStopBtn.className = 'w-24 h-10 rounded-lg bg-red-600 hover:bg-red-700 text-md font-semibold flex items-center justify-center transition-colors';
+                resetLapBtn.textContent = 'Lap';
+            }
+        }
+
+        function tick(timestamp) {
+            if (stopwatch.state !== 'running') return;
+            stopwatch.elapsed = timestamp - stopwatch.startTime;
+            document.getElementById('main-time-display').textContent = formatTime(stopwatch.elapsed);
+            
+            const totalLapTime = stopwatch.laps.reduce((acc, lap) => acc + lap, 0);
+            const currentLapTime = stopwatch.elapsed - totalLapTime;
+            document.getElementById('lap-time-display').textContent = formatTime(currentLapTime);
+            
+            stopwatch.animationFrameId = requestAnimationFrame(tick);
+        }
+
+        function startStopwatch() {
+            if (stopwatch.state === 'running') { // Stop the timer
+                stopwatch.state = 'stopped';
+                cancelAnimationFrame(stopwatch.animationFrameId);
+            } else { // Start the timer
+                stopwatch.state = 'running';
+                stopwatch.startTime = performance.now() - stopwatch.elapsed;
+                stopwatch.animationFrameId = requestAnimationFrame(tick);
+            }
+            updateStopwatchUI();
+        }
+
+        function resetLapStopwatch() {
+            if (stopwatch.state === 'running') { // Record a lap
+                const totalLapTime = stopwatch.laps.reduce((acc, lap) => acc + lap, 0);
+                const lapTime = stopwatch.elapsed - totalLapTime;
+                stopwatch.laps.push(lapTime);
+                
+                const lapsContainer = document.getElementById('laps-list-container');
+                const lapEl = document.createElement('div');
+                lapEl.className = 'flex justify-between items-center p-1 border-b border-gray-700';
+                lapEl.innerHTML = `<span>Lap ${stopwatch.laps.length}</span><span>${formatTime(lapTime)}</span>`;
+                lapsContainer.prepend(lapEl);
+                document.getElementById('lap-counter').textContent = stopwatch.laps.length;
+            } else { // Reset the timer
+                resetStopwatch();
+            }
+        }
+        
+        function resetStopwatch() {
+            stopwatch.state = 'stopped';
+            stopwatch.elapsed = 0;
+            stopwatch.laps = [];
+            cancelAnimationFrame(stopwatch.animationFrameId);
+
+            document.getElementById('main-time-display').textContent = '00:00.00';
+            document.getElementById('lap-time-display').textContent = '00:00.00';
+            document.getElementById('laps-list-container').innerHTML = '';
+            document.getElementById('lap-counter').textContent = '0';
+            updateStopwatchUI();
+        }
+
+        document.getElementById('start-stop-btn').addEventListener('click', startStopwatch);
+        document.getElementById('reset-lap-btn').addEventListener('click', resetLapStopwatch);
 
         function checkWorkoutCompletion() {
             const inputs = document.querySelectorAll('#active-workout-exercises .workout-input');
@@ -1315,19 +1422,22 @@
                     planId: activeWorkout.planId,
                     planName: plan.name,
                     dayName: day.name,
-                    completedAt: today,
+                    completedAt: serverTimestamp(),
                     date: dateStr,
-                    durationSeconds: stopwatchTime,
+                    durationSeconds: Math.floor(stopwatch.elapsed / 1000),
                     userId: currentUserId,
                     performance: []
                 };
 
                 const batch = writeBatch(db);
-                const exerciseElements = document.querySelectorAll('#active-workout-exercises > .bg-gray-700');
-                let exerciseIndex = 0;
-                day.groups.forEach(group => {
-                    group.exercises.forEach(ex => {
-                        const exerciseEl = exerciseElements[exerciseIndex];
+                const groupElements = document.querySelectorAll('#active-workout-exercises > .bg-gray-700');
+                let exerciseGlobalIndex = 0;
+
+                day.groups.forEach((group, groupIndex) => {
+                    const groupEl = groupElements[groupIndex];
+                    const exerciseElements = groupEl.querySelectorAll('.bg-gray-800');
+                    group.exercises.forEach((ex, exerciseIndexInGroup) => {
+                        const exerciseEl = exerciseElements[exerciseIndexInGroup];
                         const weightInputs = exerciseEl.querySelectorAll('.workout-weight');
                         const repInputs = exerciseEl.querySelectorAll('.workout-reps');
                         let lastWeight = 0, lastReps = 0;
@@ -1344,9 +1454,7 @@
                         logData.performance.push({ exerciseId: ex.exerciseId, name: ex.name, sets: setsData });
 
                         const historyRef = doc(db, `artifacts/${appId}/users/${currentUserId}/exercise_history`, ex.exerciseId);
-                        batch.set(historyRef, { lastWeight, lastReps, lastUpdated: serverTimestamp() });
-                        
-                        exerciseIndex++;
+                        batch.set(historyRef, { lastWeight, lastReps, lastUpdated: serverTimestamp() }, { merge: true });
                     });
                 });
                 
@@ -1355,7 +1463,7 @@
                     await addDoc(logCollectionRef, logData);
                     await batch.commit();
                     
-                    clearInterval(stopwatchInterval);
+                    resetStopwatch();
                     navigateTo('completion-page');
                 } catch (error) {
                     console.error("Error logging workout:", error);
