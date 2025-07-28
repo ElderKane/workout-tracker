@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "workout-tracker-6234f"
-  }
+    "default": "workout-tracker-6234f",
+    "New": "new-workout-tracker-dae62"
+  },
+  "targets": {},
+  "etags": {}
 }

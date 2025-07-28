@@ -189,14 +189,20 @@
             <!-- Create/Edit Workout Plan Page -->
             <div id="create-plan-page" class="page p-4">
                 <h1 id="create-plan-title" class="text-2xl font-bold mb-4 text-blue-400">Create Workout Plan</h1>
-                <input type="text" id="plan-name" placeholder="Workout Plan Name (e.g., Push Day)" class="w-full p-3 bg-gray-700 rounded border border-gray-600 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="plan-name" placeholder="Workout Plan Name (e.g., 3-Day Split)" class="w-full p-3 bg-gray-700 rounded border border-gray-600 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 
-                <div id="exercise-groups-container" class="space-y-6 mb-4">
-                    <!-- Exercise groups will be added here -->
+                <div id="workout-days-container" class="space-y-6 mb-4">
+                    <!-- Workout days will be added here -->
                 </div>
 
-                <button id="add-exercise-group-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg mb-4">Add Exercise Group (for supersets)</button>
+                <button id="add-workout-day-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg mb-4">Add Workout Day</button>
                 <button id="save-plan-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Save Plan</button>
+            </div>
+
+            <!-- Select Workout Day Page -->
+            <div id="select-workout-day-page" class="page p-4">
+                <h1 id="select-day-title" class="text-2xl font-bold mb-4 text-blue-400">Select a Day</h1>
+                <div id="select-day-list" class="space-y-3"></div>
             </div>
 
             <!-- Active Workout Page -->
@@ -261,15 +267,15 @@
             getStorage, ref, uploadBytes, getDownloadURL
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
-        // Your web app's Firebase configuration
+        // Your web app's Firebase configuration for your NEW project
         const firebaseConfig = {
-            apiKey: "AIzaSyB2vMK0bKqDVjrwpFOqZtLrI8xEE9-F9xc",
-            authDomain: "workout-tracker-6234f.firebaseapp.com",
-            projectId: "workout-tracker-6234f",
-            storageBucket: "workout-tracker-6234f.appspot.com", // CORRECTED
-            messagingSenderId: "870347402147",
-            appId: "1:870347402147:web:e22f664f4df086fd1f0816",
-            measurementId: "G-MLE13JHZN1"
+            apiKey: "AIzaSyAfvooLz7nXpPMwKVVguiJ06meHXCjPcxA",
+            authDomain: "new-workout-tracker-dae62.firebaseapp.com",
+            projectId: "new-workout-tracker-dae62",
+            storageBucket: "new-workout-tracker-dae62.appspot.com",
+            messagingSenderId: "689563191293",
+            appId: "1:689563191293:web:ed45ffb55aa4670315fb94",
+            measurementId: "G-BJPVKHPPK1"
         };
         
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-workout-app';
@@ -277,8 +283,6 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         
-        console.log("App connected to Firebase project:", app.options.projectId);
-
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
@@ -286,14 +290,14 @@
         // --- Global State ---
         let currentUser = null;
         let currentUserId = null;
-        let currentPlanId = null; // Used when editing a plan
-        let activeWorkoutPlanId = null; // Used for the active workout
+        let currentPlanId = null; 
+        let activeWorkout = { planId: null, dayIndex: null };
         let workoutLogs = []; 
         let workoutPlans = [];
-        let allExercises = []; // All exercises from public collection
-        let userExercises = []; // Exercises created by the current user
-        let exerciseHistory = {}; // Key: exerciseId, Value: { lastWeight, lastReps }
-        let listeners = []; // To store unsubscribe functions
+        let allExercises = [];
+        let userExercises = [];
+        let exerciseHistory = {};
+        let listeners = [];
 
         // --- UI Elements ---
         const pages = document.querySelectorAll('.page');
@@ -313,11 +317,9 @@
             document.getElementById('modal-message').textContent = message;
             const modal = document.getElementById('custom-modal');
             const confirmBtn = document.getElementById('modal-confirm-btn');
-            const closeBtn = document.getElementById('modal-close-btn');
             const inputContainer = document.getElementById('modal-input-container');
             const inputEl = document.getElementById('modal-input');
 
-            // Reset modal state
             confirmBtn.classList.add('hidden');
             inputContainer.classList.add('hidden');
             modalConfirmCallback = null;
@@ -354,7 +356,6 @@
                 targetPage.classList.add('active');
             }
             
-            // Hide nav on specific pages
             const navHiddenPages = ['auth-page', 'active-workout-page', 'completion-page'];
             if (navHiddenPages.includes(pageId)) {
                 appContainer.classList.add('nav-hidden');
@@ -362,12 +363,11 @@
                 appContainer.classList.remove('nav-hidden');
             }
 
-            // Highlight active nav button
             navBtns.forEach(btn => {
                 btn.classList.toggle('text-white', btn.dataset.page === pageId);
                 btn.classList.toggle('text-gray-400', btn.dataset.page !== pageId);
             });
-            window.scrollTo(0, 0); // Scroll to top on page change
+            window.scrollTo(0, 0);
         }
         
         // --- Authentication ---
@@ -393,7 +393,6 @@
 
         async function initializeAuth() {
             showLoading();
-            // This part is for a specific environment and can be ignored for local/direct deployment
             if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                 try {
                     await signInWithCustomToken(auth, __initial_auth_token);
@@ -437,7 +436,6 @@
 
             showLoading();
             try {
-                // Check if username is unique
                 const usernameQuery = query(collection(db, `artifacts/${appId}/users`), where("username", "==", username));
                 const querySnapshot = await getDocs(usernameQuery);
                 if (!querySnapshot.empty) {
@@ -447,7 +445,6 @@
                 }
 
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                // Create a user profile document
                 const userDocRef = doc(db, `artifacts/${appId}/users`, userCredential.user.uid);
                 await setDoc(userDocRef, {
                     username: username,
@@ -508,66 +505,36 @@
             });
         });
 
-        // --- State Management ---
+        // --- State Management & Listeners ---
         function clearStateAndListeners() {
-            // Unsubscribe from all listeners
             listeners.forEach(unsubscribe => unsubscribe());
             listeners = [];
-
-            // Clear local state
             workoutLogs = [];
             workoutPlans = [];
             allExercises = [];
             userExercises = [];
             exerciseHistory = {};
-            
-            // Clear UI
             document.getElementById('workout-plans-list').innerHTML = '';
             document.getElementById('calendar-days').innerHTML = '';
             document.getElementById('exercise-list').innerHTML = '';
         }
 
-        // --- Firestore Listeners Setup ---
         async function setupAllListeners() {
             clearStateAndListeners();
             if (!currentUserId) return;
 
-            const collectionsToListen = [
-                { path: `artifacts/${appId}/users/${currentUserId}/workout_logs`, callback: handleWorkoutLogsSnapshot },
-                { path: `artifacts/${appId}/users/${currentUserId}/workout_plans`, callback: handleWorkoutPlansSnapshot },
-                { path: `artifacts/${appId}/public/data/exercises`, callback: handleAllExercisesSnapshot },
-                { path: `artifacts/${appId}/users/${currentUserId}/exercise_history`, callback: handleExerciseHistorySnapshot }
+            const paths = [
+                { path: `artifacts/${appId}/users/${currentUserId}/workout_logs`, callback: (snapshot) => { workoutLogs = snapshot.docs.map(doc => doc.data().date); renderCalendar(); } },
+                { path: `artifacts/${appId}/users/${currentUserId}/workout_plans`, callback: (snapshot) => { workoutPlans = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); renderWorkoutPlans(); } },
+                { path: `artifacts/${appId}/public/data/exercises`, callback: (snapshot) => { allExercises = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); userExercises = allExercises.filter(ex => ex.createdBy === currentUserId); renderExerciseDatabase(); } },
+                { path: `artifacts/${appId}/users/${currentUserId}/exercise_history`, callback: (snapshot) => { exerciseHistory = {}; snapshot.docs.forEach(doc => { exerciseHistory[doc.id] = doc.data(); }); renderExerciseDatabase(); } }
             ];
 
-            collectionsToListen.forEach(c => {
-                const q = query(collection(db, c.path));
-                const unsubscribe = onSnapshot(q, c.callback, (error) => console.error(`Error listening to ${c.path}:`, error));
+            paths.forEach(p => {
+                const q = query(collection(db, p.path));
+                const unsubscribe = onSnapshot(q, p.callback, (error) => console.error(`Error listening to ${p.path}:`, error));
                 listeners.push(unsubscribe);
             });
-        }
-
-        function handleWorkoutLogsSnapshot(snapshot) {
-            workoutLogs = snapshot.docs.map(doc => doc.data().date);
-            renderCalendar();
-        }
-
-        function handleWorkoutPlansSnapshot(snapshot) {
-            workoutPlans = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            renderWorkoutPlans();
-        }
-        
-        function handleAllExercisesSnapshot(snapshot) {
-            allExercises = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            userExercises = allExercises.filter(ex => ex.createdBy === currentUserId);
-            renderExerciseDatabase(); // Re-render with fresh data
-        }
-
-        function handleExerciseHistorySnapshot(snapshot) {
-            exerciseHistory = {};
-            snapshot.docs.forEach(doc => {
-                exerciseHistory[doc.id] = doc.data();
-            });
-            renderExerciseDatabase(); // Re-render with fresh history
         }
 
         // --- Profile Page ---
@@ -606,9 +573,7 @@
             }
         });
 
-        document.getElementById('change-photo-btn').addEventListener('click', () => {
-            document.getElementById('photo-upload').click();
-        });
+        document.getElementById('change-photo-btn').addEventListener('click', () => document.getElementById('photo-upload').click());
 
         document.getElementById('photo-upload').addEventListener('change', async (e) => {
             const file = e.target.files[0];
@@ -634,7 +599,6 @@
         document.getElementById('save-profile-btn').addEventListener('click', async () => {
             showLoading();
             try {
-                // Split the full name back into first and last if needed
                 const fullName = document.getElementById('profile-fullname').value;
                 const nameParts = fullName.split(' ');
                 const firstName = nameParts[0] || '';
@@ -642,9 +606,7 @@
 
                 const userDocRef = doc(db, `artifacts/${appId}/users`, currentUserId);
                 await updateDoc(userDocRef, {
-                    fullName: fullName,
-                    firstName: firstName,
-                    lastName: lastName,
+                    fullName, firstName, lastName,
                     birthDate: document.getElementById('profile-birthdate').value,
                     weight: document.getElementById('profile-weight').value,
                     unitPreference: document.getElementById('profile-units').value,
@@ -713,7 +675,7 @@
                     dayEl.classList.add('border-2', 'border-blue-400');
                 }
                 
-                dayEl.addEventListener('click', () => handleDayClick(dateStr, dayEl));
+                dayEl.addEventListener('click', () => handleDayClick(dateStr));
                 calendarDaysEl.appendChild(dayEl);
             }
 
@@ -731,7 +693,6 @@
                     showLoading();
                     try {
                         if (isLogged) {
-                            // Find and delete the manual log
                             const logQuery = query(collection(db, `artifacts/${appId}/users/${currentUserId}/workout_logs`), where("date", "==", dateStr));
                             const logSnapshot = await getDocs(logQuery);
                             if (!logSnapshot.empty) {
@@ -743,7 +704,6 @@
                                 }
                             }
                         } else {
-                            // Add a manual log
                             const logCollectionRef = collection(db, `artifacts/${appId}/users/${currentUserId}/workout_logs`);
                             await addDoc(logCollectionRef, {
                                 date: dateStr,
@@ -811,9 +771,7 @@
         document.getElementById('exercise-filter-type').addEventListener('change', renderExerciseDatabase);
         document.getElementById('exercise-filter-source').addEventListener('change', renderExerciseDatabase);
 
-        document.getElementById('add-new-exercise-db-btn').addEventListener('click', () => {
-             promptForNewExercise();
-        });
+        document.getElementById('add-new-exercise-db-btn').addEventListener('click', () => promptForNewExercise());
 
         async function promptForNewExercise(prefillName = '') {
             return new Promise(async (resolve) => {
@@ -827,16 +785,15 @@
                 
                 if (!exerciseName) return resolve(null);
 
-                const exQuery = query(collection(db, `artifacts/${appId}/public/data/exercises`), where("name", "==", exerciseName));
-                const querySnapshot = await getDocs(exQuery);
-                if (!querySnapshot.empty) {
+                const existing = allExercises.find(ex => ex.name.toLowerCase() === exerciseName.toLowerCase());
+                if(existing) {
                     showModal("An exercise with this name already exists.");
-                    return resolve(querySnapshot.docs[0]);
+                    return resolve(existing);
                 }
 
                 let exerciseType = '';
                 await new Promise(resolveModal => {
-                    showModal("Enter exercise type (e.g., Chest, Back):", 'prompt', { placeholder: 'Exercise Type' });
+                    showModal(`Enter exercise type for "${exerciseName}":`, 'prompt', { placeholder: 'e.g., Chest, Back' });
                     modalConfirmCallback = val => { exerciseType = val; resolveModal(); };
                 });
 
@@ -874,7 +831,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <h3 class="font-bold text-lg">${plan.name}</h3>
-                            <p class="text-sm text-gray-400">${plan.groups?.reduce((acc, g) => acc + g.exercises.length, 0) || 0} exercises</p>
+                            <p class="text-sm text-gray-400">${plan.days?.length || 0} days</p>
                         </div>
                         <div class="flex space-x-2">
                             <button data-id="${plan.id}" class="start-workout-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Start</button>
@@ -896,7 +853,10 @@
             if (!target) return;
 
             const planId = target.dataset.id;
-            if (target.matches('.start-workout-btn')) startWorkout(planId);
+            const dayIndex = target.dataset.dayIndex;
+
+            if (target.matches('.start-workout-btn')) showDaySelection(planId);
+            if (target.matches('.select-day-btn')) startWorkout(planId, dayIndex);
             if (target.matches('.edit-plan-btn')) editWorkoutPlan(planId);
             if (target.matches('.delete-plan-btn')) {
                 showModal("Are you sure you want to delete this plan?", 'confirm');
@@ -923,8 +883,8 @@
             currentPlanId = null;
             document.getElementById('create-plan-title').textContent = 'Create Workout Plan';
             document.getElementById('plan-name').value = '';
-            document.getElementById('exercise-groups-container').innerHTML = '';
-            addExerciseGroupField(); 
+            document.getElementById('workout-days-container').innerHTML = '';
+            addWorkoutDayField(); 
             navigateTo('create-plan-page');
         });
 
@@ -935,40 +895,63 @@
             currentPlanId = planId;
             document.getElementById('create-plan-title').textContent = 'Edit Workout Plan';
             document.getElementById('plan-name').value = plan.name;
-            const groupsContainer = document.getElementById('exercise-groups-container');
-            groupsContainer.innerHTML = '';
-            plan.groups.forEach(group => addExerciseGroupField(group));
+            const daysContainer = document.getElementById('workout-days-container');
+            daysContainer.innerHTML = '';
+            plan.days.forEach(day => addWorkoutDayField(day));
             
             navigateTo('create-plan-page');
         }
 
-        document.getElementById('add-exercise-group-btn').addEventListener('click', () => addExerciseGroupField());
+        document.getElementById('add-workout-day-btn').addEventListener('click', () => addWorkoutDayField());
 
-        function addExerciseGroupField(group = { exercises: [] }) {
-            const groupsContainer = document.getElementById('exercise-groups-container');
-            const groupEl = document.createElement('div');
-            groupEl.className = 'exercise-group bg-gray-600 p-4 rounded-lg space-y-3';
-            groupEl.innerHTML = `
+        function addWorkoutDayField(day = { name: '', groups: [] }) {
+            const daysContainer = document.getElementById('workout-days-container');
+            const dayEl = document.createElement('div');
+            dayEl.className = 'workout-day bg-gray-700 p-4 rounded-lg space-y-4';
+            dayEl.innerHTML = `
                 <div class="flex justify-between items-center">
-                    <h3 class="text-lg font-semibold text-blue-300">Exercise Group (Superset)</h3>
-                    <button class="remove-group-btn bg-red-600 text-white rounded-full h-7 w-7 flex items-center justify-center font-bold">&times;</button>
+                    <input type="text" value="${day.name}" class="workout-day-name flex-grow p-2 bg-gray-800 rounded border border-gray-600" placeholder="Workout Day Name (e.g., Push Day)">
+                    <button class="remove-day-btn bg-red-600 text-white rounded-full h-7 w-7 flex items-center justify-center font-bold ml-3">&times;</button>
                 </div>
-                <div class="exercises-in-group space-y-3"></div>
-                <button class="add-exercise-to-group-btn w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg">Add Exercise to this Group</button>
+                <div class="exercise-groups-container-for-day space-y-3"></div>
+                <button class="add-exercise-group-btn w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg">Add Exercise Group</button>
             `;
-            groupsContainer.appendChild(groupEl);
-            groupEl.querySelector('.remove-group-btn').addEventListener('click', () => groupEl.remove());
-            groupEl.querySelector('.add-exercise-to-group-btn').addEventListener('click', () => addExerciseToGroupField(groupEl));
+            daysContainer.appendChild(dayEl);
+            dayEl.querySelector('.remove-day-btn').addEventListener('click', () => dayEl.remove());
+            dayEl.querySelector('.add-exercise-group-btn').addEventListener('click', (e) => addExerciseGroupField(e.target.previousElementSibling));
             
-            if (group.exercises.length === 0) {
-                 addExerciseToGroupField(groupEl);
+            const groupsContainer = dayEl.querySelector('.exercise-groups-container-for-day');
+            if (day.groups.length === 0) {
+                 addExerciseGroupField(groupsContainer);
             } else {
-                group.exercises.forEach(ex => addExerciseToGroupField(groupEl, ex));
+                day.groups.forEach(group => addExerciseGroupField(groupsContainer, group));
             }
         }
 
-        function addExerciseToGroupField(groupEl, exercise = {}) {
+        function addExerciseGroupField(groupsContainer, group = { exercises: [] }) {
+            const groupEl = document.createElement('div');
+            groupEl.className = 'exercise-group bg-gray-600 p-3 rounded-lg space-y-3';
+            groupEl.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <h3 class="text-md font-semibold text-blue-300">Exercise Group (Superset)</h3>
+                    <button class="remove-group-btn bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center font-bold">&times;</button>
+                </div>
+                <div class="exercises-in-group space-y-3"></div>
+                <button class="add-exercise-to-group-btn w-full bg-blue-600/50 hover:bg-blue-600 text-white font-bold py-1 rounded-lg text-sm">Add Exercise</button>
+            `;
+            groupsContainer.appendChild(groupEl);
+            groupEl.querySelector('.remove-group-btn').addEventListener('click', () => groupEl.remove());
+            groupEl.querySelector('.add-exercise-to-group-btn').addEventListener('click', (e) => addExerciseToGroupField(e.target.previousElementSibling));
+            
             const exercisesContainer = groupEl.querySelector('.exercises-in-group');
+            if (group.exercises.length === 0) {
+                 addExerciseToGroupField(exercisesContainer);
+            } else {
+                group.exercises.forEach(ex => addExerciseToGroupField(exercisesContainer, ex));
+            }
+        }
+
+        function addExerciseToGroupField(exercisesContainer, exercise = {}) {
             const exerciseEl = document.createElement('div');
             exerciseEl.className = 'exercise-entry bg-gray-700 p-3 rounded-lg space-y-2 relative';
             exerciseEl.innerHTML = `
@@ -987,36 +970,40 @@
             const planName = document.getElementById('plan-name').value.trim();
             if (!planName) return showModal("Please enter a plan name.");
 
-            const groupElements = document.querySelectorAll('.exercise-group');
-            if (groupElements.length === 0) return showModal("Please add at least one exercise group.");
+            const dayElements = document.querySelectorAll('.workout-day');
+            if (dayElements.length === 0) return showModal("Please add at least one workout day.");
 
-            const planData = {
-                name: planName,
-                userId: currentUserId,
-                groups: []
-            };
+            const planData = { name: planName, userId: currentUserId, days: [] };
 
-            for (const groupEl of groupElements) {
-                const group = { exercises: [] };
-                const exerciseEntries = groupEl.querySelectorAll('.exercise-entry');
-                for (const entry of exerciseEntries) {
-                    const name = entry.querySelector('.exercise-name').value.trim();
-                    if (name) {
-                        const exerciseDoc = await findOrCreateExercise(name);
-                        group.exercises.push({
-                            exerciseId: exerciseDoc.id,
-                            name: name,
-                            sets: parseInt(entry.querySelector('.exercise-sets').value) || 0,
-                            reps: entry.querySelector('.exercise-reps').value.trim()
-                        });
+            for (const dayEl of dayElements) {
+                const dayName = dayEl.querySelector('.workout-day-name').value.trim();
+                if (!dayName) return showModal("Please ensure all workout days have a name.");
+                const dayData = { name: dayName, groups: [] };
+
+                const groupElements = dayEl.querySelectorAll('.exercise-group');
+                for (const groupEl of groupElements) {
+                    const group = { exercises: [] };
+                    const exerciseEntries = groupEl.querySelectorAll('.exercise-entry');
+                    for (const entry of exerciseEntries) {
+                        const name = entry.querySelector('.exercise-name').value.trim();
+                        if (name) {
+                            const exerciseDoc = await findOrCreateExercise(name);
+                            if (exerciseDoc) {
+                                group.exercises.push({
+                                    exerciseId: exerciseDoc.id,
+                                    name: name,
+                                    sets: parseInt(entry.querySelector('.exercise-sets').value) || 0,
+                                    reps: entry.querySelector('.exercise-reps').value.trim()
+                                });
+                            }
+                        }
                     }
+                    if (group.exercises.length > 0) dayData.groups.push(group);
                 }
-                if (group.exercises.length > 0) {
-                    planData.groups.push(group);
-                }
+                if (dayData.groups.length > 0) planData.days.push(dayData);
             }
 
-            if (planData.groups.length === 0) return showModal("Please ensure all exercises have a name.");
+            if (planData.days.length === 0) return showModal("Please add exercises to your workout days.");
 
             showLoading();
             try {
@@ -1040,35 +1027,50 @@
         async function findOrCreateExercise(name) {
             const existing = allExercises.find(ex => ex.name.toLowerCase() === name.toLowerCase());
             if (existing) return existing;
-            
-            // If it doesn't exist, create it
-            const newExercise = await promptForNewExercise(name);
-            return newExercise;
+            return await promptForNewExercise(name);
         }
 
         // --- Active Workout ---
         let stopwatchInterval;
         let stopwatchTime = 0;
 
-        function startWorkout(planId) {
+        function showDaySelection(planId) {
+            const plan = workoutPlans.find(p => p.id === planId);
+            if (!plan || !plan.days || plan.days.length === 0) return showModal("This plan has no workout days.");
+
+            document.getElementById('select-day-title').textContent = `Select a day from "${plan.name}"`;
+            const listEl = document.getElementById('select-day-list');
+            listEl.innerHTML = '';
+            plan.days.forEach((day, index) => {
+                const dayBtn = document.createElement('button');
+                dayBtn.className = 'select-day-btn w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg';
+                dayBtn.textContent = day.name;
+                dayBtn.dataset.id = planId;
+                dayBtn.dataset.dayIndex = index;
+                listEl.appendChild(dayBtn);
+            });
+            navigateTo('select-workout-day-page');
+        }
+
+        function startWorkout(planId, dayIndex) {
             const plan = workoutPlans.find(p => p.id === planId);
             if (!plan) return showModal("Could not find workout plan.");
             
-            activeWorkoutPlanId = planId;
-            document.getElementById('active-workout-name').textContent = plan.name;
+            const day = plan.days[dayIndex];
+            if (!day) return showModal("Could not find workout day.");
+
+            activeWorkout = { planId, dayIndex };
+            document.getElementById('active-workout-name').textContent = `${plan.name} - ${day.name}`;
             const container = document.getElementById('active-workout-exercises');
             container.innerHTML = '';
 
-            plan.groups.forEach((group, groupIndex) => {
-                group.exercises.forEach((ex, exIndex) => {
+            day.groups.forEach((group) => {
+                group.exercises.forEach((ex) => {
                     const exerciseEl = document.createElement('div');
                     exerciseEl.className = 'bg-gray-700 p-4 rounded-lg';
                     const history = exerciseHistory[ex.exerciseId];
                     const lastPerf = history ? `Last: ${history.lastWeight || 0} x ${history.lastReps || 0}` : 'No history';
-                    exerciseEl.innerHTML = `
-                        <h3 class="text-lg font-bold mb-1">${ex.name}</h3>
-                        <p class="text-sm text-gray-400 mb-3">${ex.sets} sets x ${ex.reps} reps | <span class="text-blue-400">${lastPerf}</span></p>
-                    `;
+                    exerciseEl.innerHTML = `<h3 class="text-lg font-bold mb-1">${ex.name}</h3><p class="text-sm text-gray-400 mb-3">${ex.sets} sets x ${ex.reps} reps | <span class="text-blue-400">${lastPerf}</span></p>`;
                     
                     const setsGrid = document.createElement('div');
                     setsGrid.className = 'grid grid-cols-1 gap-3';
@@ -1076,11 +1078,7 @@
                     for (let i = 1; i <= ex.sets; i++) {
                         const setEl = document.createElement('div');
                         setEl.className = 'grid grid-cols-3 gap-2 items-center';
-                        setEl.innerHTML = `
-                            <span class="font-semibold text-gray-300">Set ${i}</span>
-                            <input type="number" class="w-full p-2 bg-gray-600 rounded border border-gray-500 workout-input workout-weight" placeholder="Weight">
-                            <input type="number" class="w-full p-2 bg-gray-600 rounded border border-gray-500 workout-input workout-reps" placeholder="Reps">
-                        `;
+                        setEl.innerHTML = `<span class="font-semibold text-gray-300">Set ${i}</span><input type="number" class="w-full p-2 bg-gray-600 rounded border border-gray-500 workout-input workout-weight" placeholder="Weight"><input type="number" class="w-full p-2 bg-gray-600 rounded border border-gray-500 workout-input workout-reps" placeholder="Reps">`;
                         setsGrid.appendChild(setEl);
                     }
                     exerciseEl.appendChild(setsGrid);
@@ -1096,11 +1094,8 @@
                 updateStopwatchDisplay();
             }, 1000);
 
-            container.querySelectorAll('.workout-input').forEach(input => {
-                input.addEventListener('input', checkWorkoutCompletion);
-            });
+            container.querySelectorAll('.workout-input').forEach(input => input.addEventListener('input', checkWorkoutCompletion));
             checkWorkoutCompletion();
-
             navigateTo('active-workout-page');
         }
 
@@ -1126,11 +1121,13 @@
                 const today = new Date();
                 const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
                 
-                const plan = workoutPlans.find(p => p.id === activeWorkoutPlanId);
+                const plan = workoutPlans.find(p => p.id === activeWorkout.planId);
+                const day = plan.days[activeWorkout.dayIndex];
                 
                 const logData = {
-                    planId: activeWorkoutPlanId,
+                    planId: activeWorkout.planId,
                     planName: plan.name,
+                    dayName: day.name,
                     completedAt: today,
                     date: dateStr,
                     durationSeconds: stopwatchTime,
@@ -1138,11 +1135,10 @@
                     performance: []
                 };
 
-                // Collect performance data and update history
                 const batch = writeBatch(db);
                 const exerciseElements = document.querySelectorAll('#active-workout-exercises > .bg-gray-700');
                 let exerciseIndex = 0;
-                plan.groups.forEach(group => {
+                day.groups.forEach(group => {
                     group.exercises.forEach(ex => {
                         const exerciseEl = exerciseElements[exerciseIndex];
                         const weightInputs = exerciseEl.querySelectorAll('.workout-weight');
@@ -1154,13 +1150,12 @@
                             const weight = parseFloat(weightInputs[i].value) || 0;
                             const reps = parseInt(repInputs[i].value) || 0;
                             setsData.push({ weight, reps });
-                            lastWeight = weight; // Keep the last set's data
+                            lastWeight = weight;
                             lastReps = reps;
                         }
 
                         logData.performance.push({ exerciseId: ex.exerciseId, name: ex.name, sets: setsData });
 
-                        // Update exercise history
                         const historyRef = doc(db, `artifacts/${appId}/users/${currentUserId}/exercise_history`, ex.exerciseId);
                         batch.set(historyRef, { lastWeight, lastReps, lastUpdated: serverTimestamp() });
                         
