@@ -41,6 +41,9 @@
                 <div id="modal-input-container" class="mb-4 hidden">
                     <input id="modal-input" type="text" class="w-full p-3 bg-gray-800 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
+                 <div id="modal-select-container" class="mb-4 hidden">
+                    <select id="modal-select" class="w-full p-3 bg-gray-800 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+                </div>
                 <div id="modal-buttons" class="flex gap-4">
                     <button id="modal-confirm-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full hidden">Confirm</button>
                     <button id="modal-close-btn" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded w-full">Close</button>
@@ -319,17 +322,23 @@
             const confirmBtn = document.getElementById('modal-confirm-btn');
             const inputContainer = document.getElementById('modal-input-container');
             const inputEl = document.getElementById('modal-input');
+            const selectContainer = document.getElementById('modal-select-container');
+            const selectEl = document.getElementById('modal-select');
 
             confirmBtn.classList.add('hidden');
             inputContainer.classList.add('hidden');
+            selectContainer.classList.add('hidden');
             modalConfirmCallback = null;
 
-            if (type === 'confirm' || type === 'prompt') {
+            if (type === 'confirm' || type === 'prompt' || type === 'select') {
                 confirmBtn.classList.remove('hidden');
                 confirmBtn.onclick = () => {
                     if (modalConfirmCallback) {
-                        const inputValue = type === 'prompt' ? inputEl.value : true;
-                        modalConfirmCallback(inputValue);
+                        let value;
+                        if (type === 'prompt') value = inputEl.value;
+                        else if (type === 'select') value = selectEl.value;
+                        else value = true;
+                        modalConfirmCallback(value);
                     }
                     modal.classList.add('hidden');
                 };
@@ -340,6 +349,17 @@
                 inputEl.value = inputOptions?.defaultValue || '';
                 inputEl.placeholder = inputOptions?.placeholder || '';
                 inputEl.type = inputOptions?.inputType || 'text';
+            }
+
+            if (type === 'select') {
+                selectContainer.classList.remove('hidden');
+                selectEl.innerHTML = '';
+                inputOptions.options.forEach(opt => {
+                    const optionEl = document.createElement('option');
+                    optionEl.value = opt;
+                    optionEl.textContent = opt;
+                    selectEl.appendChild(optionEl);
+                });
             }
 
             modal.classList.remove('hidden');
@@ -733,6 +753,8 @@
         });
         
         // --- Exercise Database ---
+        const exerciseTypes = ["Chest", "Back", "Shoulders", "Biceps", "Triceps", "Forearms", "Legs", "Core", "Cardio"];
+        
         function renderExerciseDatabase() {
             const listEl = document.getElementById('exercise-list');
             listEl.innerHTML = '';
@@ -793,7 +815,7 @@
 
                 let exerciseType = '';
                 await new Promise(resolveModal => {
-                    showModal(`Enter exercise type for "${exerciseName}":`, 'prompt', { placeholder: 'e.g., Chest, Back' });
+                    showModal(`Select exercise type for "${exerciseName}":`, 'select', { options: exerciseTypes });
                     modalConfirmCallback = val => { exerciseType = val; resolveModal(); };
                 });
 
@@ -910,7 +932,7 @@
             dayEl.className = 'workout-day bg-gray-700 p-4 rounded-lg space-y-4';
             dayEl.innerHTML = `
                 <div class="flex justify-between items-center">
-                    <input type="text" value="${day.name}" class="workout-day-name flex-grow p-2 bg-gray-800 rounded border border-gray-600" placeholder="Workout Day Name (e.g., Push Day)">
+                    <input type="text" value="${day.name || ''}" class="workout-day-name flex-grow p-2 bg-gray-800 rounded border border-gray-600" placeholder="Workout Day Name (e.g., Push Day)">
                     <button class="remove-day-btn bg-red-600 text-white rounded-full h-7 w-7 flex items-center justify-center font-bold ml-3">&times;</button>
                 </div>
                 <div class="exercise-groups-container-for-day space-y-3"></div>
@@ -928,7 +950,7 @@
             }
         }
 
-        function addExerciseGroupField(groupsContainer, group = { exercises: [] }) {
+        function addExerciseGroupField(groupsContainer, group = { exercises: [], rest: 60 }) {
             const groupEl = document.createElement('div');
             groupEl.className = 'exercise-group bg-gray-600 p-3 rounded-lg space-y-3';
             groupEl.innerHTML = `
@@ -938,10 +960,14 @@
                 </div>
                 <div class="exercises-in-group space-y-3"></div>
                 <button class="add-exercise-to-group-btn w-full bg-blue-600/50 hover:bg-blue-600 text-white font-bold py-1 rounded-lg text-sm">Add Exercise</button>
+                <div class="mt-2">
+                    <label class="text-sm text-gray-400">Rest after group (seconds)</label>
+                    <input type="number" value="${group.rest}" class="group-rest-time w-full p-2 bg-gray-800 rounded border border-gray-600 mt-1" placeholder="60">
+                </div>
             `;
             groupsContainer.appendChild(groupEl);
             groupEl.querySelector('.remove-group-btn').addEventListener('click', () => groupEl.remove());
-            groupEl.querySelector('.add-exercise-to-group-btn').addEventListener('click', (e) => addExerciseToGroupField(e.target.previousElementSibling));
+            groupEl.querySelector('.add-exercise-to-group-btn').addEventListener('click', (e) => addExerciseToGroupField(e.target.nextElementSibling));
             
             const exercisesContainer = groupEl.querySelector('.exercises-in-group');
             if (group.exercises.length === 0) {
@@ -961,6 +987,7 @@
                     <input type="number" value="${exercise.sets || 3}" class="exercise-sets w-full p-2 bg-gray-800 rounded border border-gray-600" placeholder="Sets">
                     <input type="text" value="${exercise.reps || '8-12'}" class="exercise-reps w-full p-2 bg-gray-800 rounded border border-gray-600" placeholder="Reps (e.g., 8-12)">
                 </div>
+                <input type="text" value="${exercise.tempo || ''}" class="exercise-tempo w-full p-2 bg-gray-800 rounded border border-gray-600 mt-2" placeholder="Tempo (e.g., 4-0-1-0)">
             `;
             exercisesContainer.appendChild(exerciseEl);
             exerciseEl.querySelector('.remove-exercise-btn').addEventListener('click', () => exerciseEl.remove());
@@ -982,7 +1009,7 @@
 
                 const groupElements = dayEl.querySelectorAll('.exercise-group');
                 for (const groupEl of groupElements) {
-                    const group = { exercises: [] };
+                    const group = { exercises: [], rest: parseInt(groupEl.querySelector('.group-rest-time').value) || 60 };
                     const exerciseEntries = groupEl.querySelectorAll('.exercise-entry');
                     for (const entry of exerciseEntries) {
                         const name = entry.querySelector('.exercise-name').value.trim();
@@ -993,7 +1020,8 @@
                                     exerciseId: exerciseDoc.id,
                                     name: name,
                                     sets: parseInt(entry.querySelector('.exercise-sets').value) || 0,
-                                    reps: entry.querySelector('.exercise-reps').value.trim()
+                                    reps: entry.querySelector('.exercise-reps').value.trim(),
+                                    tempo: entry.querySelector('.exercise-tempo').value.trim()
                                 });
                             }
                         }
@@ -1070,7 +1098,8 @@
                     exerciseEl.className = 'bg-gray-700 p-4 rounded-lg';
                     const history = exerciseHistory[ex.exerciseId];
                     const lastPerf = history ? `Last: ${history.lastWeight || 0} x ${history.lastReps || 0}` : 'No history';
-                    exerciseEl.innerHTML = `<h3 class="text-lg font-bold mb-1">${ex.name}</h3><p class="text-sm text-gray-400 mb-3">${ex.sets} sets x ${ex.reps} reps | <span class="text-blue-400">${lastPerf}</span></p>`;
+                    const tempoText = ex.tempo ? `| Tempo: ${ex.tempo}` : '';
+                    exerciseEl.innerHTML = `<h3 class="text-lg font-bold mb-1">${ex.name}</h3><p class="text-sm text-gray-400 mb-3">${ex.sets} sets x ${ex.reps} reps ${tempoText} | <span class="text-blue-400">${lastPerf}</span></p>`;
                     
                     const setsGrid = document.createElement('div');
                     setsGrid.className = 'grid grid-cols-1 gap-3';
