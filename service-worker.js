@@ -3,12 +3,13 @@ const CACHE_NAME = 'workout-tracker-cache-v1';
 
 // List of files to cache
 const urlsToCache = [
-  '/',
-  '/index.html',
+  './',
+  './index.html',
   'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
-  'https://fonts.gstatic.com/s/inter/v13/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2'
-  // Note: You would also add your icon paths here, e.g., '/images/icons/icon-192x192.png'
+  'https://fonts.gstatic.com/s/inter/v13/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2',
+  './images/icons/icon-192x192.png',
+  './images/icons/icon-512x512.png'
 ];
 
 // Install the service worker and cache the files
@@ -38,7 +39,7 @@ self.addEventListener('fetch', event => {
         return fetch(fetchRequest).then(
           response => {
             // Check if we received a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
+            if (!response || response.status !== 200) {
               return response;
             }
 
