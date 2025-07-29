@@ -10,8 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .page { display: none; }
-        .page.active { display: block; }
         /* Custom scrollbar for a better look */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #1f2937; } /* bg-gray-800 */
@@ -29,10 +27,12 @@
 
     <div id="app-container" class="max-w-md mx-auto min-h-screen bg-gray-800 shadow-lg relative">
 
+        <!-- Loading Spinner -->
         <div id="loading-spinner" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
             <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
         </div>
 
+        <!-- Custom Modal -->
         <div id="custom-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
             <div class="bg-gray-700 rounded-lg p-6 w-11/12 max-w-sm text-center shadow-xl">
                 <p id="modal-message" class="mb-4 text-lg"></p>
@@ -49,16 +49,19 @@
             </div>
         </div>
         
+        <!-- Exercise Selection Modal -->
         <div id="exercise-select-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
             <div class="bg-gray-700 rounded-lg p-4 w-11/12 max-w-md h-4/5 flex flex-col shadow-xl">
                 <h2 class="text-xl font-bold mb-4 text-blue-400">Select Exercise</h2>
                 <div class="flex gap-2 mb-4">
                     <input id="exercise-search-input" type="text" placeholder="Search..." class="flex-grow p-2 bg-gray-800 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <select id="exercise-select-filter" class="p-2 bg-gray-800 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </select>
+                        <!-- options will be populated by JS -->
+                    </select>
                 </div>
                 <div id="exercise-select-list" class="flex-grow overflow-y-auto space-y-2 pr-2">
-                    </div>
+                    <!-- Exercise list will be populated by JS -->
+                </div>
                 <div class="flex gap-4 mt-4">
                      <button id="exercise-select-new-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full">Create New</button>
                     <button id="exercise-select-close-btn" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded w-full">Close</button>
@@ -66,7 +69,8 @@
             </div>
         </div>
 
-        <div id="auth-page" class="page active p-6">
+        <!-- Auth Page -->
+        <div id="auth-page" class="page p-6">
             <div id="login-view">
                 <h1 class="text-3xl font-bold mb-6 text-center text-blue-400">Sign In</h1>
                 <form id="login-form" class="space-y-4">
@@ -99,8 +103,10 @@
             </div>
         </div>
 
+        <!-- Main App Content (hidden until logged in) -->
         <div id="main-app" class="hidden">
-            <div id="dashboard-page" class="page p-4">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page p-4 hidden">
                 <div class="flex justify-between items-center mb-4">
                     <h1 class="text-2xl font-bold text-blue-400">Dashboard</h1>
                     <div id="dashboard-username" class="text-gray-300"></div>
@@ -119,7 +125,8 @@
                 <p class="text-center text-gray-400 mb-4">Workouts this month: <span id="workout-count" class="font-bold text-white">0</span></p>
             </div>
 
-            <div id="profile-page" class="page p-6 space-y-6">
+            <!-- Profile Page -->
+            <div id="profile-page" class="page p-6 space-y-6 hidden">
                  <h1 class="text-2xl font-bold text-blue-400">Profile</h1>
                  <div class="flex flex-col items-center space-y-4">
                      <img id="profile-photo" src="https://placehold.co/128x128/374151/e5e7eb?text=Avatar" class="w-32 h-32 rounded-full object-cover border-4 border-blue-500">
@@ -172,7 +179,8 @@
                  </div>
             </div>
 
-            <div id="exercise-db-page" class="page p-4">
+            <!-- Exercise Database Page -->
+            <div id="exercise-db-page" class="page p-4 hidden">
                 <h1 class="text-2xl font-bold mb-4 text-blue-400">Exercise Database</h1>
                 <div class="flex gap-2 mb-4">
                     <select id="exercise-filter-type" class="flex-grow p-2 bg-gray-700 rounded border border-gray-600">
@@ -196,29 +204,34 @@
                 <button id="add-new-exercise-db-btn" class="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Add New Exercise</button>
             </div>
 
-            <div id="workout-plans-page" class="page p-4">
+            <!-- Workout Plans Page -->
+            <div id="workout-plans-page" class="page p-4 hidden">
                 <h1 class="text-2xl font-bold mb-4 text-blue-400">Workout Plans</h1>
                 <div id="workout-plans-list" class="space-y-3"></div>
                 <button id="create-new-plan-btn" class="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Create New Plan</button>
             </div>
             
-            <div id="create-plan-page" class="page p-4">
+            <!-- Create/Edit Workout Plan Page -->
+            <div id="create-plan-page" class="page p-4 hidden">
                 <h1 id="create-plan-title" class="text-2xl font-bold mb-4 text-blue-400">Create Workout Plan</h1>
                 <input type="text" id="plan-name" placeholder="Workout Plan Name (e.g., 3-Day Split)" class="w-full p-3 bg-gray-700 rounded border border-gray-600 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 
                 <div id="workout-days-container" class="space-y-6 mb-4">
-                    </div>
+                    <!-- Workout days will be added here -->
+                </div>
 
                 <button id="add-workout-day-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg mb-4">Add Workout Day</button>
                 <button id="save-plan-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Save Plan</button>
             </div>
 
-            <div id="select-workout-day-page" class="page p-4">
+            <!-- Select Workout Day Page -->
+            <div id="select-workout-day-page" class="page p-4 hidden">
                 <h1 id="select-day-title" class="text-2xl font-bold mb-4 text-blue-400">Select a Day</h1>
                 <div id="select-day-list" class="space-y-3"></div>
             </div>
 
-            <div id="active-workout-page" class="page flex flex-col">
+            <!-- Active Workout Page -->
+            <div id="active-workout-page" class="page flex flex-col hidden">
                 <div id="stopwatch-container" class="sticky top-0 bg-gray-900 p-4 z-10 shadow-lg flex flex-col items-center gap-2">
                     <div class="w-full flex justify-around items-baseline text-center">
                         <div>
@@ -245,16 +258,19 @@
                 <div class="flex-grow p-4">
                     <h1 id="active-workout-name" class="text-2xl font-bold mb-4 text-blue-400 text-center"></h1>
                     <div id="active-workout-exercises" class="space-y-4">
-                        </div>
+                        <!-- Active exercises will be rendered here -->
+                    </div>
                     <button id="complete-workout-btn" class="mt-8 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg disabled:bg-gray-500 disabled:cursor-not-allowed">Mark as Complete</button>
                 </div>
             </div>
 
-            <div id="completion-page" class="page flex flex-col items-center justify-center h-screen">
+            <!-- Completion Splash Page -->
+            <div id="completion-page" class="page flex flex-col items-center justify-center h-screen hidden">
                 <h1 class="text-5xl font-bold text-green-400 mb-8">Great Work!!!</h1>
                 <button id="back-to-dashboard-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg">Back to Dashboard</button>
             </div>
 
+            <!-- Bottom Navigation -->
             <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-gray-900 border-t border-gray-700 flex justify-around">
                 <button data-page="dashboard-page" class="nav-btn p-3 flex-1 text-center text-gray-400 hover:bg-gray-700 hover:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
@@ -296,7 +312,7 @@
             getStorage, ref, uploadBytes, getDownloadURL
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
-        // Your web app's Firebase configuration for your NEW project
+        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAfvooLz7nXpPMwKVVguiJ06meHXCjPcxA",
             authDomain: "new-workout-tracker-dae62.firebaseapp.com",
@@ -406,12 +422,16 @@
         });
 
         function navigateTo(pageId) {
-            pages.forEach(page => page.classList.remove('active'));
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            }
+            // Use Tailwind's 'hidden' class for robust show/hide
+            pages.forEach(page => {
+                if (page.id !== pageId) {
+                    page.classList.add('hidden');
+                } else {
+                    page.classList.remove('hidden');
+                }
+            });
             
+            // Toggle nav bar visibility for specific pages
             const navHiddenPages = ['auth-page', 'active-workout-page', 'completion-page'];
             if (navHiddenPages.includes(pageId)) {
                 appContainer.classList.add('nav-hidden');
@@ -419,6 +439,7 @@
                 appContainer.classList.remove('nav-hidden');
             }
 
+            // Update nav button active state
             navBtns.forEach(btn => {
                 btn.classList.toggle('text-white', btn.dataset.page === pageId);
                 btn.classList.toggle('text-gray-400', btn.dataset.page !== pageId);
@@ -433,15 +454,14 @@
                 currentUserId = user.uid;
                 mainApp.classList.remove('hidden');
                 authPage.classList.add('hidden');
-                navigateTo('dashboard-page');
                 await setupAllListeners();
                 await fetchUserProfile();
+                navigateTo('dashboard-page');
             } else {
                 currentUser = null;
                 currentUserId = null;
                 mainApp.classList.add('hidden');
                 authPage.classList.remove('hidden');
-                navigateTo('auth-page');
                 clearStateAndListeners();
             }
             hideLoading();
@@ -599,21 +619,18 @@
             const monthEl = document.getElementById('profile-birth-month');
             const dayEl = document.getElementById('profile-birth-day');
 
-            // Populate years
             const currentYear = new Date().getFullYear();
             yearEl.innerHTML = '<option value="">Year</option>';
             for (let y = currentYear; y >= currentYear - 100; y--) {
                 yearEl.innerHTML += `<option value="${y}">${y}</option>`;
             }
 
-            // Populate months
             monthEl.innerHTML = '<option value="">Month</option>';
             for (let m = 1; m <= 12; m++) {
                 const monthName = new Date(currentYear, m - 1, 1).toLocaleString('default', { month: 'long' });
                 monthEl.innerHTML += `<option value="${String(m).padStart(2, '0')}">${monthName}</option>`;
             }
 
-            // Populate days
             dayEl.innerHTML = '<option value="">Day</option>';
             for (let d = 1; d <= 31; d++) {
                 dayEl.innerHTML += `<option value="${String(d).padStart(2, '0')}">${d}</option>`;
@@ -952,7 +969,6 @@
             const filterEl = document.getElementById('exercise-select-filter');
             const searchInput = document.getElementById('exercise-search-input');
 
-            // Populate filter dropdown if not already populated
             if (filterEl.options.length <= 1) {
                 filterEl.innerHTML = '<option value="all">All Types</option>';
                 exerciseTypes.forEach(type => {
@@ -960,7 +976,6 @@
                 });
             }
             
-            // Reset fields and render
             searchInput.value = '';
             filterEl.value = 'all';
             renderExerciseSelectionList();
@@ -1431,8 +1446,7 @@
 
                 const batch = writeBatch(db);
                 const groupElements = document.querySelectorAll('#active-workout-exercises > .bg-gray-700');
-                let exerciseGlobalIndex = 0;
-
+                
                 day.groups.forEach((group, groupIndex) => {
                     const groupEl = groupElements[groupIndex];
                     const exerciseElements = groupEl.querySelectorAll('.bg-gray-800');
@@ -1480,7 +1494,6 @@
 
         // --- App Initialization ---
         
-        // Event listeners for the new exercise selection modal
         document.getElementById('exercise-select-close-btn').addEventListener('click', closeExerciseSelector);
         document.getElementById('exercise-search-input').addEventListener('input', renderExerciseSelectionList);
         document.getElementById('exercise-select-filter').addEventListener('change', renderExerciseSelectionList);
