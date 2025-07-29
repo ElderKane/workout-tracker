@@ -127,7 +127,12 @@
 
             <!-- Profile Page -->
             <div id="profile-page" class="page p-6 space-y-6 hidden">
-                 <h1 class="text-2xl font-bold text-blue-400">Profile</h1>
+                 <div class="relative mb-4">
+                    <button class="go-to-dashboard-btn absolute top-0 left-0 p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <h1 class="text-2xl font-bold text-blue-400 text-center">Profile</h1>
+                </div>
                  <div class="flex flex-col items-center space-y-4">
                      <img id="profile-photo" src="https://placehold.co/128x128/374151/e5e7eb?text=Avatar" class="w-32 h-32 rounded-full object-cover border-4 border-blue-500">
                      <input type="file" id="photo-upload" class="hidden" accept="image/*">
@@ -181,7 +186,12 @@
 
             <!-- Exercise Database Page -->
             <div id="exercise-db-page" class="page p-4 hidden">
-                <h1 class="text-2xl font-bold mb-4 text-blue-400">Exercise Database</h1>
+                <div class="relative mb-4">
+                    <button class="go-to-dashboard-btn absolute top-0 left-0 p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <h1 class="text-2xl font-bold text-blue-400 text-center">Exercise Database</h1>
+                </div>
                 <div class="flex gap-2 mb-4">
                     <select id="exercise-filter-type" class="flex-grow p-2 bg-gray-700 rounded border border-gray-600">
                         <option value="all">All Types</option>
@@ -206,14 +216,24 @@
 
             <!-- Workout Plans Page -->
             <div id="workout-plans-page" class="page p-4 hidden">
-                <h1 class="text-2xl font-bold mb-4 text-blue-400">Workout Plans</h1>
+                 <div class="relative mb-4">
+                    <button class="go-to-dashboard-btn absolute top-0 left-0 p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <h1 class="text-2xl font-bold text-blue-400 text-center">Workout Plans</h1>
+                </div>
                 <div id="workout-plans-list" class="space-y-3"></div>
                 <button id="create-new-plan-btn" class="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Create New Plan</button>
             </div>
             
             <!-- Create/Edit Workout Plan Page -->
             <div id="create-plan-page" class="page p-4 hidden">
-                <h1 id="create-plan-title" class="text-2xl font-bold mb-4 text-blue-400">Create Workout Plan</h1>
+                 <div class="relative mb-4">
+                    <button class="go-to-dashboard-btn absolute top-0 left-0 p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <h1 id="create-plan-title" class="text-2xl font-bold text-blue-400 text-center">Create Workout Plan</h1>
+                </div>
                 <input type="text" id="plan-name" placeholder="Workout Plan Name (e.g., 3-Day Split)" class="w-full p-3 bg-gray-700 rounded border border-gray-600 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 
                 <div id="workout-days-container" class="space-y-6 mb-4">
@@ -226,13 +246,21 @@
 
             <!-- Select Workout Day Page -->
             <div id="select-workout-day-page" class="page p-4 hidden">
-                <h1 id="select-day-title" class="text-2xl font-bold mb-4 text-blue-400">Select a Day</h1>
+                 <div class="relative mb-4">
+                    <button class="go-to-dashboard-btn absolute top-0 left-0 p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <h1 id="select-day-title" class="text-2xl font-bold text-blue-400 text-center">Select a Day</h1>
+                </div>
                 <div id="select-day-list" class="space-y-3"></div>
             </div>
 
             <!-- Active Workout Page -->
             <div id="active-workout-page" class="page flex flex-col hidden">
-                <div id="stopwatch-container" class="sticky top-0 bg-gray-900 p-4 z-10 shadow-lg flex flex-col items-center gap-2">
+                <div id="stopwatch-container" class="sticky top-0 bg-gray-900 p-4 z-10 shadow-lg flex flex-col items-center gap-2 relative">
+                     <button class="go-to-dashboard-btn absolute top-4 left-4 p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
                     <div class="w-full flex justify-around items-baseline text-center">
                         <div>
                             <span class="text-xs text-gray-400">LAP</span>
@@ -338,6 +366,7 @@
         let currentPlanId = null; 
         let exerciseTargetInput = null;
         let activeWorkout = { planId: null, dayIndex: null };
+        let isWorkoutActive = false;
         let workoutLogs = []; 
         let workoutPlans = [];
         let allExercises = [];
@@ -422,7 +451,6 @@
         });
 
         function navigateTo(pageId) {
-            // Use Tailwind's 'hidden' class for robust show/hide
             pages.forEach(page => {
                 if (page.id !== pageId) {
                     page.classList.add('hidden');
@@ -431,7 +459,6 @@
                 }
             });
             
-            // Toggle nav bar visibility for specific pages
             const navHiddenPages = ['auth-page', 'active-workout-page', 'completion-page'];
             if (navHiddenPages.includes(pageId)) {
                 appContainer.classList.add('nav-hidden');
@@ -439,7 +466,6 @@
                 appContainer.classList.remove('nav-hidden');
             }
 
-            // Update nav button active state
             navBtns.forEach(btn => {
                 btn.classList.toggle('text-white', btn.dataset.page === pageId);
                 btn.classList.toggle('text-gray-400', btn.dataset.page !== pageId);
@@ -1067,6 +1093,11 @@
             const target = e.target.closest('button');
             if (!target) return;
 
+            if (target.matches('.go-to-dashboard-btn')) {
+                handleGoToDashboard();
+                return;
+            }
+
             const planId = target.dataset.id;
             const dayIndex = target.dataset.dayIndex;
 
@@ -1261,6 +1292,27 @@
         }
 
         // --- Active Workout & Stopwatch ---
+        function handleGoToDashboard() {
+            if (isWorkoutActive) {
+                showModal("Are you sure you want to exit? Your current workout progress will be lost.", 'confirm');
+                modalConfirmCallback = (confirmed) => {
+                    if (confirmed) {
+                        resetActiveWorkoutState();
+                        navigateTo('dashboard-page');
+                    }
+                };
+            } else {
+                navigateTo('dashboard-page');
+            }
+        }
+
+        function resetActiveWorkoutState() {
+            isWorkoutActive = false;
+            activeWorkout = { planId: null, dayIndex: null };
+            resetStopwatch();
+            document.getElementById('active-workout-exercises').innerHTML = '';
+        }
+
         function showDaySelection(planId) {
             const plan = workoutPlans.find(p => p.id === planId);
             if (!plan || !plan.days || plan.days.length === 0) return showModal("This plan has no workout days.");
@@ -1280,6 +1332,7 @@
         }
 
         function startWorkout(planId, dayIndex) {
+            isWorkoutActive = true;
             const plan = workoutPlans.find(p => p.id === planId);
             if (!plan) return showModal("Could not find workout plan.");
             
@@ -1477,7 +1530,7 @@
                     await addDoc(logCollectionRef, logData);
                     await batch.commit();
                     
-                    resetStopwatch();
+                    resetActiveWorkoutState();
                     navigateTo('completion-page');
                 } catch (error) {
                     console.error("Error logging workout:", error);
@@ -1489,6 +1542,7 @@
         });
 
         document.getElementById('back-to-dashboard-btn').addEventListener('click', () => {
+            isWorkoutActive = false;
             navigateTo('dashboard-page');
         });
 
