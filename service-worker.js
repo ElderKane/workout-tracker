@@ -1,6 +1,6 @@
-// Define the cache names
-const CORE_CACHE_NAME = 'workout-tracker-core-v2';
-const DYNAMIC_CACHE_NAME = 'workout-tracker-dynamic-v2';
+// Define the cache names (version bumped to v3)
+const CORE_CACHE_NAME = 'workout-tracker-core-v3';
+const DYNAMIC_CACHE_NAME = 'workout-tracker-dynamic-v3';
 
 // List of essential files to pre-cache
 const urlsToCache = [
@@ -29,6 +29,7 @@ self.addEventListener('activate', event => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
+            // Delete all old caches (v1, v2, etc.)
             return caches.delete(cacheName);
           }
         })
@@ -37,16 +38,15 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Handle fetch events
+// Handle fetch events with a better strategy
 self.addEventListener('fetch', event => {
   const { request } = event;
 
-  // For third-party assets (CSS, fonts), use a stale-while-revalidate strategy
+  // For third-party assets, use a stale-while-revalidate strategy (no change here)
   if (request.url.includes('tailwindcss.com') || request.url.includes('fonts.googleapis.com') || request.url.includes('fonts.gstatic.com')) {
     event.respondWith(
       caches.open(DYNAMIC_CACHE_NAME).then(cache => {
         return cache.match(request).then(response => {
-          // Return from cache if available, while fetching a fresh version in the background
           const fetchPromise = fetch(request).then(networkResponse => {
             cache.put(request, networkResponse.clone());
             return networkResponse;
@@ -58,16 +58,23 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // For all other requests, use a cache-first strategy
+  // For all other requests (your app shell and data), use a network-first strategy.
   event.respondWith(
-    caches.match(request)
-      .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        // Not in cache - fetch from network
-        return fetch(request);
+    // 1. Try to fetch from the network first.
+    fetch(request)
+      .then(networkResponse => {
+        // If successful, cache the new response and return it.
+        return caches.open(DYNAMIC_CACHE_NAME).then(cache => {
+          // Only cache successful GET requests.
+          if (request.method === 'GET' && networkResponse.status === 200) {
+            cache.put(request, networkResponse.clone());
+          }
+          return networkResponse;
+        });
+      })
+      .catch(() => {
+        // 2. If the network fails, try to get the response from the cache.
+        return caches.match(request);
       })
   );
 });
