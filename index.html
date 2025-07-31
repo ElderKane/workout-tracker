@@ -929,15 +929,26 @@
                 const lastPerf = history ? `Last: ${history.lastWeight || 0} x ${history.lastReps || 0}` : 'No history';
 
                 const exEl = document.createElement('div');
-                exEl.className = 'bg-gray-700 p-4 rounded-lg';
+                exEl.className = 'bg-gray-700 p-4 rounded-lg flex justify-between items-start';
+                
+                let deleteButtonHTML = '';
+                if (ex.createdBy === currentUserId) {
+                    deleteButtonHTML = `
+                        <button data-id="${ex.id}" class="delete-exercise-btn text-gray-400 hover:text-red-500 p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    `;
+                }
+
                 exEl.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-bold text-lg">${ex.name}</h3>
-                            <p class="text-sm text-blue-400">${ex.type}</p>
-                        </div>
-                        <p class="text-sm text-gray-400">${lastPerf}</p>
+                    <div class="flex-grow">
+                        <h3 class="font-bold text-lg">${ex.name}</h3>
+                        <p class="text-sm text-blue-400">${ex.type}</p>
+                        <p class="text-sm text-gray-400 mt-1">${lastPerf}</p>
                     </div>
+                    ${deleteButtonHTML}
                 `;
                 listEl.appendChild(exEl);
             });
@@ -1100,6 +1111,7 @@
             }
 
             const planId = target.dataset.id;
+            const exerciseId = target.dataset.id; // Can be plan or exercise
             const dayIndex = target.dataset.dayIndex;
 
             if (target.matches('.start-workout-btn')) showDaySelection(planId);
@@ -1108,6 +1120,10 @@
             if (target.matches('.delete-plan-btn')) {
                 showModal("Are you sure you want to delete this plan?", 'confirm');
                 modalConfirmCallback = (confirmed) => { if (confirmed) deleteWorkoutPlan(planId); };
+            }
+            if (target.matches('.delete-exercise-btn')) {
+                showModal("Are you sure you want to delete this exercise? It will be removed from all workout plans.", 'confirm');
+                modalConfirmCallback = (confirmed) => { if (confirmed) deleteUserExercise(exerciseId); };
             }
         });
 
@@ -1119,6 +1135,52 @@
                 showModal("Plan deleted.");
             } catch (error) {
                 console.error("Error deleting plan:", error);
+                showModal(`Error: ${error.message}`);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function deleteUserExercise(exerciseId) {
+            showLoading();
+            try {
+                const batch = writeBatch(db);
+
+                // 1. Delete the exercise document
+                const exerciseRef = doc(db, `artifacts/${appId}/public/data/exercises`, exerciseId);
+                batch.delete(exerciseRef);
+
+                // 2. Find and update all workout plans that contain this exercise
+                const plansQuery = query(collection(db, `artifacts/${appId}/users/${currentUserId}/workout_plans`));
+                const plansSnapshot = await getDocs(plansQuery);
+
+                for (const planDoc of plansSnapshot.docs) {
+                    const plan = planDoc.data();
+                    let planWasModified = false;
+
+                    const newDays = plan.days.map(day => {
+                        const newGroups = day.groups.map(group => {
+                            const initialLength = group.exercises.length;
+                            const filteredExercises = group.exercises.filter(ex => ex.exerciseId !== exerciseId);
+                            if (filteredExercises.length < initialLength) {
+                                planWasModified = true;
+                            }
+                            return { ...group, exercises: filteredExercises };
+                        }).filter(group => group.exercises.length > 0); // Also remove empty groups
+                        return { ...day, groups: newGroups };
+                    }).filter(day => day.groups.length > 0); // Also remove empty days
+
+                    if (planWasModified) {
+                        batch.update(planDoc.ref, { days: newDays });
+                    }
+                }
+
+                // Commit all batched writes
+                await batch.commit();
+                showModal("Exercise deleted and removed from all plans.");
+
+            } catch (error) {
+                console.error("Error deleting exercise and updating plans:", error);
                 showModal(`Error: ${error.message}`);
             } finally {
                 hideLoading();
