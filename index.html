@@ -1671,23 +1671,23 @@
                 hideLoading();
             }
         }
-
-        document.getElementById('upload-native-exercises-btn').addEventListener('click', uploadNativeExercises);
         
-        document.getElementById('exercise-select-close-btn').addEventListener('click', closeExerciseSelector);
-        document.getElementById('exercise-search-input').addEventListener('input', renderExerciseSelectionList);
-        document.getElementById('exercise-select-filter').addEventListener('change', renderExerciseSelectionList);
-        document.getElementById('exercise-select-new-btn').addEventListener('click', async () => {
-            closeExerciseSelector();
-            const newExercise = await promptForNewExercise();
-            if (newExercise && exerciseTargetInput) {
-                exerciseTargetInput.value = newExercise.name;
-            }
-        });
-
         window.onload = () => {
             setupBirthDateSelectors();
             initializeAuth();
+            
+            // Attach event listeners for elements that are always present
+            document.getElementById('upload-native-exercises-btn').addEventListener('click', uploadNativeExercises);
+            document.getElementById('exercise-select-close-btn').addEventListener('click', closeExerciseSelector);
+            document.getElementById('exercise-search-input').addEventListener('input', renderExerciseSelectionList);
+            document.getElementById('exercise-select-filter').addEventListener('change', renderExerciseSelectionList);
+            document.getElementById('exercise-select-new-btn').addEventListener('click', async () => {
+                closeExerciseSelector();
+                const newExercise = await promptForNewExercise();
+                if (newExercise && exerciseTargetInput) {
+                    exerciseTargetInput.value = newExercise.name;
+                }
+            });
         };
 
     </script>
