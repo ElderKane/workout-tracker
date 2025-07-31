@@ -182,6 +182,8 @@
                  <div class="space-y-4 pt-4 border-t border-gray-700">
                      <button id="save-profile-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Save Profile</button>
                      <button id="change-password-btn" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 rounded-lg">Change Password</button>
+                     <!-- Temporary button for one-time data upload -->
+                     <button id="upload-native-exercises-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg mt-4">Upload Native Exercises</button>
                  </div>
             </div>
 
@@ -208,6 +210,7 @@
                     </select>
                      <select id="exercise-filter-source" class="flex-grow p-2 bg-gray-700 rounded border border-gray-600">
                         <option value="all">All Exercises</option>
+                        <option value="native">Native Exercises</option>
                         <option value="user">My Exercises</option>
                     </select>
                 </div>
@@ -370,8 +373,9 @@
         let isWorkoutActive = false;
         let workoutLogs = []; 
         let workoutPlans = [];
-        let allExercises = [];
+        let nativeExercises = [];
         let userExercises = [];
+        let allExercises = []; // Combined native + user exercises
         let exerciseHistory = {};
         let listeners = [];
         let stopwatch = {
@@ -614,12 +618,19 @@
             listeners = [];
             workoutLogs = [];
             workoutPlans = [];
-            allExercises = [];
+            nativeExercises = [];
             userExercises = [];
+            allExercises = [];
             exerciseHistory = {};
             document.getElementById('workout-plans-list').innerHTML = '';
             document.getElementById('calendar-days').innerHTML = '';
             document.getElementById('exercise-list').innerHTML = '';
+        }
+
+        function combineAndRenderExercises() {
+            allExercises = [...nativeExercises, ...userExercises];
+            renderExerciseDatabase();
+            // Any other function that depends on the combined list can be called here
         }
 
         async function setupAllListeners() {
@@ -629,7 +640,8 @@
             const paths = [
                 { path: `artifacts/${appId}/users/${currentUserId}/workout_logs`, callback: (snapshot) => { workoutLogs = snapshot.docs.map(doc => doc.data().date); renderCalendar(); } },
                 { path: `artifacts/${appId}/users/${currentUserId}/workout_plans`, callback: (snapshot) => { workoutPlans = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); renderWorkoutPlans(); } },
-                { path: `artifacts/${appId}/public/data/exercises`, callback: (snapshot) => { allExercises = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); userExercises = allExercises.filter(ex => ex.createdBy === currentUserId); renderExerciseDatabase(); } },
+                { path: `artifacts/${appId}/public/native_exercises`, callback: (snapshot) => { nativeExercises = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); combineAndRenderExercises(); } },
+                { path: `artifacts/${appId}/users/${currentUserId}/user_exercises`, callback: (snapshot) => { userExercises = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); combineAndRenderExercises(); } },
                 { path: `artifacts/${appId}/users/${currentUserId}/exercise_history`, callback: (snapshot) => { exerciseHistory = {}; snapshot.docs.forEach(doc => { exerciseHistory[doc.id] = doc.data(); }); renderExerciseDatabase(); } }
             ];
 
@@ -914,7 +926,15 @@
             const filterType = document.getElementById('exercise-filter-type').value;
             const filterSource = document.getElementById('exercise-filter-source').value;
 
-            let exercisesToRender = filterSource === 'user' ? userExercises : allExercises;
+            let exercisesToRender;
+            if (filterSource === 'user') {
+                exercisesToRender = userExercises;
+            } else if (filterSource === 'native') {
+                exercisesToRender = nativeExercises;
+            } else {
+                exercisesToRender = allExercises;
+            }
+
             if (filterType !== 'all') {
                 exercisesToRender = exercisesToRender.filter(ex => ex.type === filterType);
             }
@@ -932,6 +952,7 @@
                 exEl.className = 'bg-gray-700 p-4 rounded-lg flex justify-between items-start';
                 
                 let deleteButtonHTML = '';
+                // A user can only delete an exercise they created.
                 if (ex.createdBy === currentUserId) {
                     deleteButtonHTML = `
                         <button data-id="${ex.id}" class="delete-exercise-btn text-gray-400 hover:text-red-500 p-1">
@@ -971,9 +992,10 @@
                 
                 if (!exerciseName) return resolve(null);
 
+                // Check for duplicates in both native and user lists
                 const existing = allExercises.find(ex => ex.name.toLowerCase() === exerciseName.toLowerCase());
                 if(existing) {
-                    showModal("An exercise with this name already exists.");
+                    showModal("An exercise with this name already exists in the native or your personal list.");
                     return resolve(existing);
                 }
 
@@ -987,8 +1009,9 @@
 
                 showLoading();
                 try {
+                    // Save the new exercise to the user's private collection
                     const newEx = { name: exerciseName, type: exerciseType, createdBy: currentUserId };
-                    const docRef = await addDoc(collection(db, `artifacts/${appId}/public/data/exercises`), newEx);
+                    const docRef = await addDoc(collection(db, `artifacts/${appId}/users/${currentUserId}/user_exercises`), newEx);
                     hideLoading();
                     showModal("Exercise added successfully!");
                     resolve({ id: docRef.id, ...newEx });
@@ -1033,7 +1056,7 @@
 
             listEl.innerHTML = '';
 
-            let filteredExercises = allExercises;
+            let filteredExercises = allExercises; // Start with the combined list
 
             if (filterType !== 'all') {
                 filteredExercises = filteredExercises.filter(ex => ex.type === filterType);
@@ -1110,20 +1133,19 @@
                 return;
             }
 
-            const planId = target.dataset.id;
-            const exerciseId = target.dataset.id; // Can be plan or exercise
+            const id = target.dataset.id;
             const dayIndex = target.dataset.dayIndex;
 
-            if (target.matches('.start-workout-btn')) showDaySelection(planId);
-            if (target.matches('.select-day-btn')) startWorkout(planId, dayIndex);
-            if (target.matches('.edit-plan-btn')) editWorkoutPlan(planId);
+            if (target.matches('.start-workout-btn')) showDaySelection(id);
+            if (target.matches('.select-day-btn')) startWorkout(id, dayIndex);
+            if (target.matches('.edit-plan-btn')) editWorkoutPlan(id);
             if (target.matches('.delete-plan-btn')) {
                 showModal("Are you sure you want to delete this plan?", 'confirm');
-                modalConfirmCallback = (confirmed) => { if (confirmed) deleteWorkoutPlan(planId); };
+                modalConfirmCallback = (confirmed) => { if (confirmed) deleteWorkoutPlan(id); };
             }
             if (target.matches('.delete-exercise-btn')) {
-                showModal("Are you sure you want to delete this exercise? It will be removed from all workout plans.", 'confirm');
-                modalConfirmCallback = (confirmed) => { if (confirmed) deleteUserExercise(exerciseId); };
+                showModal("Are you sure you want to delete this exercise? It will be removed from all your workout plans.", 'confirm');
+                modalConfirmCallback = (confirmed) => { if (confirmed) deleteUserExercise(id); };
             }
         });
 
@@ -1146,8 +1168,8 @@
             try {
                 const batch = writeBatch(db);
 
-                // 1. Delete the exercise document
-                const exerciseRef = doc(db, `artifacts/${appId}/public/data/exercises`, exerciseId);
+                // 1. Delete the user's exercise document from their private collection
+                const exerciseRef = doc(db, `artifacts/${appId}/users/${currentUserId}/user_exercises`, exerciseId);
                 batch.delete(exerciseRef);
 
                 // 2. Find and update all workout plans that contain this exercise
@@ -1166,21 +1188,20 @@
                                 planWasModified = true;
                             }
                             return { ...group, exercises: filteredExercises };
-                        }).filter(group => group.exercises.length > 0); // Also remove empty groups
+                        }).filter(group => group.exercises.length > 0);
                         return { ...day, groups: newGroups };
-                    }).filter(day => day.groups.length > 0); // Also remove empty days
+                    }).filter(day => day.groups.length > 0);
 
                     if (planWasModified) {
                         batch.update(planDoc.ref, { days: newDays });
                     }
                 }
 
-                // Commit all batched writes
                 await batch.commit();
                 showModal("Exercise deleted and removed from all plans.");
 
             } catch (error) {
-                console.error("Error deleting exercise and updating plans:", error);
+                console.error("Error deleting exercise:", error);
                 showModal(`Error: ${error.message}`);
             } finally {
                 hideLoading();
@@ -1609,7 +1630,44 @@
             navigateTo('dashboard-page');
         });
 
-        // --- App Initialization ---
+        // --- App Initialization & Data Upload ---
+        
+        async function uploadNativeExercises() {
+            showLoading();
+            try {
+                // Check if exercises have already been uploaded to prevent duplicates
+                const nativeExercisesRef = collection(db, `artifacts/${appId}/public/native_exercises`);
+                const existingSnapshot = await getDocs(query(nativeExercisesRef, where("isNative", "==", true)));
+                if (!existingSnapshot.empty) {
+                    showModal("Native exercises have already been uploaded.");
+                    hideLoading();
+                    return;
+                }
+
+                // Fetch the local JSON file
+                const response = await fetch('./native_exercises.json');
+                if (!response.ok) throw new Error('Could not find native_exercises.json file.');
+                const exercises = await response.json();
+
+                // Use a batch write for efficiency
+                const batch = writeBatch(db);
+                exercises.forEach(exercise => {
+                    const newDocRef = doc(nativeExercisesRef); // Create a new doc with a random ID
+                    batch.set(newDocRef, { ...exercise, isNative: true });
+                });
+
+                await batch.commit();
+                showModal(`Successfully uploaded ${exercises.length} native exercises.`);
+
+            } catch (error) {
+                console.error("Error uploading native exercises:", error);
+                showModal(`Upload failed: ${error.message}`);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        document.getElementById('upload-native-exercises-btn').addEventListener('click', uploadNativeExercises);
         
         document.getElementById('exercise-select-close-btn').addEventListener('click', closeExerciseSelector);
         document.getElementById('exercise-search-input').addEventListener('input', renderExerciseSelectionList);
