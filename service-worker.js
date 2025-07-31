@@ -1,6 +1,6 @@
 // Define the cache names
-const CORE_CACHE_NAME = 'workout-tracker-core-v1';
-const DYNAMIC_CACHE_NAME = 'workout-tracker-dynamic-v1';
+const CORE_CACHE_NAME = 'workout-tracker-core-v2';
+const DYNAMIC_CACHE_NAME = 'workout-tracker-dynamic-v2';
 
 // List of essential files to pre-cache
 const urlsToCache = [
