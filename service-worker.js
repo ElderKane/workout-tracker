@@ -42,7 +42,13 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const { request } = event;
 
-  // For third-party assets, use a stale-while-revalidate strategy (no change here)
+  // IMPORTANT: Only handle http and https requests.
+  // This prevents errors from browser extensions like 'chrome-extension://'
+  if (!request.url.startsWith('http')) {
+    return;
+  }
+
+  // For third-party assets, use a stale-while-revalidate strategy
   if (request.url.includes('tailwindcss.com') || request.url.includes('fonts.googleapis.com') || request.url.includes('fonts.gstatic.com')) {
     event.respondWith(
       caches.open(DYNAMIC_CACHE_NAME).then(cache => {
