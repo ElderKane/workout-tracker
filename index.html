@@ -608,7 +608,12 @@
         navBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const pageId = btn.dataset.page;
-                if (pageId) navigateTo(pageId);
+                if (pageId) {
+                    if (pageId === 'profile-page') {
+                        fetchUserProfile(); // Fetch data when navigating TO the profile page
+                    }
+                    navigateTo(pageId);
+                }
             });
         });
 
