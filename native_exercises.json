@@ -1,0 +1,2204 @@
+[
+  {
+    "name": "DB Bench Press",
+    "type": "Chest",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "DB Incline Bench Press",
+    "type": "Chest",
+    "equipment": [
+      "Freeweights",
+      "Incline Bench"
+    ]
+  },
+  {
+    "name": "DB Decline Bench Press",
+    "type": "Chest",
+    "equipment": [
+      "Freeweights",
+      "Decline Bench"
+    ]
+  },
+  {
+    "name": "BB Bench Press",
+    "type": "Chest",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "BB Incline Bench Press",
+    "type": "Chest",
+    "equipment": [
+      "Barbell",
+      "Incline Bench"
+    ]
+  },
+  {
+    "name": "BB Decline Bench Press",
+    "type": "Chest",
+    "equipment": [
+      "Barbell",
+      "Decline Bench"
+    ]
+  },
+  {
+    "name": "DB Pullover",
+    "type": "Chest",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "BB Pullover",
+    "type": "Chest",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "DB Flyes",
+    "type": "Chest",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "DB Incline Flyes",
+    "type": "Chest",
+    "equipment": [
+      "Freeweights",
+      "Incline Bench"
+    ]
+  },
+  {
+    "name": "DB Decline Flyes",
+    "type": "Chest",
+    "equipment": [
+      "Freeweights",
+      "Decline Bench"
+    ]
+  },
+  {
+    "name": "Machine Flyes",
+    "type": "Chest",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Cable Flyes",
+    "type": "Chest",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Incline Cable Flyes",
+    "type": "Chest",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Cable Crossover",
+    "type": "Chest",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Underhand DB Bench Press",
+    "type": "Chest",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Underhand BB Bench Press",
+    "type": "Chest",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Push Up",
+    "type": "Chest",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Decline Push Up",
+    "type": "Chest",
+    "equipment": [
+      "Bodyweight",
+      "Other"
+    ]
+  },
+  {
+    "name": "Incline Push Up",
+    "type": "Chest",
+    "equipment": [
+      "Bodyweight",
+      "Other"
+    ]
+  },
+  {
+    "name": "Machine Chest Press",
+    "type": "Chest",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Machine Incline Chest Press",
+    "type": "Chest",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Machine Decline Chest Press",
+    "type": "Chest",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Smith Machine Chest Press",
+    "type": "Chest",
+    "equipment": [
+      "Smith Machine"
+    ]
+  },
+  {
+    "name": "Smith Machine Incline Chest Press",
+    "type": "Chest",
+    "equipment": [
+      "Smith Machine"
+    ]
+  },
+  {
+    "name": "Smith Machine Decline Chest Press",
+    "type": "Chest",
+    "equipment": [
+      "Smith Machine"
+    ]
+  },
+  {
+    "name": "DB Bench Press (Unilateral)",
+    "type": "Chest",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Assisted Pull Up",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Deadlift",
+    "type": "Back",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Back Extension",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Seated Cable V-Bar Row",
+    "type": "Back",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Seated Cable Rope Row",
+    "type": "Back",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Seated Cable Wide Row",
+    "type": "Back",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Seated Cable Underhand Row",
+    "type": "Back",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Seated Cable Row (Unilateral)",
+    "type": "Back",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "T-Bar Machine Neutral Row",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "T-Bar Machine Overhand Row",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "T-Bar Machine Underhand Row",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Bent Over Smith Row",
+    "type": "Back",
+    "equipment": [
+      "Smith Machine"
+    ]
+  },
+  {
+    "name": "Bent Over Smith Row (Underhand)",
+    "type": "Back",
+    "equipment": [
+      "Smith Machine"
+    ]
+  },
+  {
+    "name": "Bent Over BB Row",
+    "type": "Back",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Bent Over BB Row (Underhand)",
+    "type": "Back",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Bent Over DB Row",
+    "type": "Back",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Bent Over DB Row (Underhand)",
+    "type": "Back",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Bent Over DB Row (Unilateral)",
+    "type": "Back",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Bent Over DB Row (Isolateral)",
+    "type": "Back",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "On Bench DB Row",
+    "type": "Back",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Machine Row",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Machine Row (Unilateral)",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Inverted Row",
+    "type": "Back",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Renegade Row",
+    "type": "Back",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Landmine Row",
+    "type": "Back",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Landmine Row (Unilateral)",
+    "type": "Back",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Wide Grip Pull Up",
+    "type": "Back",
+    "equipment": [
+      "Pull Up Bar"
+    ]
+  },
+  {
+    "name": "Close Grip Pull Up",
+    "type": "Back",
+    "equipment": [
+      "Pull Up Bar"
+    ]
+  },
+  {
+    "name": "Neutral Grip Pull Up",
+    "type": "Back",
+    "equipment": [
+      "Pull Up Bar"
+    ]
+  },
+  {
+    "name": "Chin Up",
+    "type": "Back",
+    "equipment": [
+      "Pull Up Bar"
+    ]
+  },
+  {
+    "name": "Wide Grip Pull Up (Assisted)",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Close Grip Pull Up (Assisted)",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Neutral Grip Pull Up (Assisted)",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Chin Up (Assisted)",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Wide Grip Lat Pull Down",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Close Grip Lat Pull Down",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Underhand Lat Pull Down",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "V-Bar Lat Pull Down",
+    "type": "Back",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Shotgun Row",
+    "type": "Back",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Rear Delt Machine Flyes",
+    "type": "Shoulders",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Rear Delt DB Flyes",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Rear Delt Cable Flyes",
+    "type": "Shoulders",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "DB Lateral Delt Raise (Standing)",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "DB Lateral Delt Raise (Unilateral)",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "DB Lateral Delt Raise (Seated)",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Cable Lateral Delt Raise",
+    "type": "Shoulders",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Cable Lateral Delt Raise (Unilateral)",
+    "type": "Shoulders",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Cable Lateral Delt Raise (Isolateral)",
+    "type": "Shoulders",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Machine Lateral Delt Raise",
+    "type": "Shoulders",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "DB Shoulder Press (Standing)",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "DB Shoulder Press (Seated)",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Arnold Press (Standing)",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Arnold Press (Seated)",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "DB Front Delt Raise",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "DB Front Delt Raise (Isolateral)",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "DB Front Delt Raise (Unilateral)",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "BB Front Delt Raise",
+    "type": "Shoulders",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Plate Front Delt Raise",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Cable Front Delt Raise",
+    "type": "Shoulders",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Cable Front Delt Raise (Unilateral)",
+    "type": "Shoulders",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "BB Shoulder Press (Seated)",
+    "type": "Shoulders",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "BB Shoulder Press (Standing)",
+    "type": "Shoulders",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Smith Shoulder Press",
+    "type": "Shoulders",
+    "equipment": [
+      "Smith Machine"
+    ]
+  },
+  {
+    "name": "Machine Shoulder Press",
+    "type": "Shoulders",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Cable Face Pulls",
+    "type": "Shoulders",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Upright Row (BB)",
+    "type": "Shoulders",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Upright Row (DB)",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Upright Row (EZ Bar)",
+    "type": "Shoulders",
+    "equipment": [
+      "EZ Bar"
+    ]
+  },
+  {
+    "name": "Upright Row (Cable)",
+    "type": "Shoulders",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Upright Row (Smith)",
+    "type": "Shoulders",
+    "equipment": [
+      "Smith Machine"
+    ]
+  },
+  {
+    "name": "Landmine Press",
+    "type": "Shoulders",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Half Kneeling Landmine Press",
+    "type": "Shoulders",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Halo",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "External Rotation (Cable)",
+    "type": "Shoulders",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Internal Rotation (Cable)",
+    "type": "Shoulders",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Shrug (DB)",
+    "type": "Shoulders",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Shrug (BB)",
+    "type": "Shoulders",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Shrug (Smith)",
+    "type": "Shoulders",
+    "equipment": [
+      "Smith Machine"
+    ]
+  },
+  {
+    "name": "Shrug (Machine)",
+    "type": "Shoulders",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "EZ Bar Preacher Curl",
+    "type": "Biceps",
+    "equipment": [
+      "EZ Bar",
+      "Bench"
+    ]
+  },
+  {
+    "name": "BB Preacher Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "DB Preacher Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "DB Preacher Curl (Unilateral)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "DB Preacher Hammer Curl (Unilateral)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "DB Bicep Curl (Seated)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "DB Bicep Curl (Standing)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Rope Cable Bicep Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "BB Bicep Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Incline DB Bicep Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights",
+      "Incline Bench"
+    ]
+  },
+  {
+    "name": "Hammer Curl (Seated)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Hammer Curl (Standing)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Alternating Hammer Curl (Seated)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Alternating Hammer Curl (Standing)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Cable Straight Bar Bicep Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Concentration Bicep Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Cross Body Hammer Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Alternating DB Bicpe Curl (Standing)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Concentration Bicep Curl (Seated)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "EZ Bar Bicep Curl",
+    "type": "Biceps",
+    "equipment": [
+      "EZ Bar"
+    ]
+  },
+  {
+    "name": "Machine Bicep Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "DB Reverse Bicep Curl (Standing)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "DB Reverse Bicep Curl (Seated)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "BB Reverse Bicep Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "EZ Bar Reverse Bicep Curl",
+    "type": "Biceps",
+    "equipment": [
+      "EZ Bar"
+    ]
+  },
+  {
+    "name": "High Pulley Cable Bicep Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Unilateral Cable Bicep Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "BB Bicep Drag Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "EZ Bar Bicep Drag Curl",
+    "type": "Biceps",
+    "equipment": [
+      "EZ Bar"
+    ]
+  },
+  {
+    "name": "DB Bicep Drag Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Cable Bar Bicep Drag Curl",
+    "type": "Biceps",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Zottman Curl (Standing)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Zottman Curl (Seated)",
+    "type": "Biceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Close Grip EZ Bar Bicep Curl",
+    "type": "Biceps",
+    "equipment": [
+      "EZ Bar"
+    ]
+  },
+  {
+    "name": "BW Tricep Dip",
+    "type": "Triceps",
+    "equipment": [
+      "Bodyweight",
+      "Other"
+    ]
+  },
+  {
+    "name": "DB Tricep Extension (Standing)",
+    "type": "Triceps",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "DB Tricep Extension (Seated)",
+    "type": "Triceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Unilateral DB Tricep Extension (Standing)",
+    "type": "Triceps",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Unilateral DB Tricep Extension (Seated)",
+    "type": "Triceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Isolateral DB Tricep Extension (Standing)",
+    "type": "Triceps",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Isolateral DB Tricep Extension (Seated)",
+    "type": "Triceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "BB Tricep Extension (Standing)",
+    "type": "Triceps",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "BB Tricep Extension (Seated)",
+    "type": "Triceps",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "EZ Bar Tricep Extension (Standing)",
+    "type": "Triceps",
+    "equipment": [
+      "EZ Bar"
+    ]
+  },
+  {
+    "name": "EZ Bar Tricep Extension (Seated)",
+    "type": "Triceps",
+    "equipment": [
+      "EZ Bar",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Cable Rope Tricep Extension",
+    "type": "Triceps",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Cable Rope Tricep Extension (Overhead)",
+    "type": "Triceps",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Cable Straighbar Tricep Extension",
+    "type": "Triceps",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Cable Straighbar Tricep Extension (Reverse Grip)",
+    "type": "Triceps",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Unilateral Cable Tricep Extension",
+    "type": "Triceps",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Unilateral Cable Tricep Extension (Reverse Grip)",
+    "type": "Triceps",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Close Grip BB Bench Press",
+    "type": "Triceps",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Close Grip DB Bench Press",
+    "type": "Triceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Close Grip BB Bench Press (Reverese Grip)",
+    "type": "Triceps",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Close Grip DB Bench Press (Reverse Grip)",
+    "type": "Triceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "EZ Bar Skullcrusher",
+    "type": "Triceps",
+    "equipment": [
+      "EZ Bar",
+      "Bench"
+    ]
+  },
+  {
+    "name": "BB Skullcrusher",
+    "type": "Triceps",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "DB Skullcrusher",
+    "type": "Triceps",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "DB Kickback (Isolateral)",
+    "type": "Triceps",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "DB Kickback (Unilateral)",
+    "type": "Triceps",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Cable Kickback (Unilateral)",
+    "type": "Triceps",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "French Press (Standing)",
+    "type": "Triceps",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "French Press (Seated)",
+    "type": "Triceps",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Close Grip Push Up",
+    "type": "Triceps",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Machine Tricep Extension",
+    "type": "Triceps",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Sphinx Push Up",
+    "type": "Triceps",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "BB Wrist Curl (Seated)",
+    "type": "Forearms",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "BB Wrist Curl (Behind the Back)",
+    "type": "Forearms",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "BB Wrist Extension (Seated)",
+    "type": "Forearms",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "DB Wrist Curl (Seated)",
+    "type": "Forearms",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "DB Wrist Curl (Behind the Back)",
+    "type": "Forearms",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "DB Wrist Extension (Seated)",
+    "type": "Forearms",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Reverse Grip BB Bicep Curl",
+    "type": "Forearms",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Reverse Grip EZ Bar Bicep Curl",
+    "type": "Forearms",
+    "equipment": [
+      "EZ Bar"
+    ]
+  },
+  {
+    "name": "Reverse Grip DB Bicep Curl",
+    "type": "Forearms",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Reverse Grip Cable Bicep Curl",
+    "type": "Forearms",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Plate Pinch Carry",
+    "type": "Forearms",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Wrist Rollers",
+    "type": "Forearms",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Suitcase DB Carry",
+    "type": "Forearms",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Farmers DB Carry",
+    "type": "Forearms",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "BB Back Squat",
+    "type": "Legs",
+    "equipment": [
+      "Barbell",
+      "Squat Rack"
+    ]
+  },
+  {
+    "name": "BB Sumo Squat",
+    "type": "Legs",
+    "equipment": [
+      "Barbell",
+      "Squat Rack"
+    ]
+  },
+  {
+    "name": "BB Front Squat",
+    "type": "Legs",
+    "equipment": [
+      "Barbell",
+      "Squat Rack"
+    ]
+  },
+  {
+    "name": "Goblet Squat",
+    "type": "Legs",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Landmine Goblet Squat",
+    "type": "Legs",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "DB Squat",
+    "type": "Legs",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "BW Squat",
+    "type": "Legs",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "DB Split Squat",
+    "type": "Legs",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "BB Split Squat",
+    "type": "Legs",
+    "equipment": [
+      "Barbell",
+      "Squat Rack"
+    ]
+  },
+  {
+    "name": "Jump Squat",
+    "type": "Legs",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Lunge",
+    "type": "Legs",
+    "equipment": [
+      "Bodyweight",
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Reverse Lunge",
+    "type": "Legs",
+    "equipment": [
+      "Bodyweight",
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Machine Quad Extension",
+    "type": "Legs",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Machine Quad Extension (Unilateral)",
+    "type": "Legs",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Machine Hamstring Curl",
+    "type": "Legs",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Machine Hamstring Curl (Unilateral)",
+    "type": "Legs",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Calve Raise",
+    "type": "Legs",
+    "equipment": [
+      "Bodyweight",
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Calve Raise (Unilateral)",
+    "type": "Legs",
+    "equipment": [
+      "Bodyweight",
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Hip Thrust",
+    "type": "Legs",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Hip Thrust (Single Leg)",
+    "type": "Legs",
+    "equipment": [
+      "Barbell",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Good Mornings",
+    "type": "Legs",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Good Mornings (Single Leg)",
+    "type": "Legs",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Smith Squat",
+    "type": "Legs",
+    "equipment": [
+      "Smith Machine"
+    ]
+  },
+  {
+    "name": "Smith Front Squat",
+    "type": "Legs",
+    "equipment": [
+      "Smith Machine"
+    ]
+  },
+  {
+    "name": "Smith Sumo Squat",
+    "type": "Legs",
+    "equipment": [
+      "Smith Machine"
+    ]
+  },
+  {
+    "name": "BB Hack Squat",
+    "type": "Legs",
+    "equipment": [
+      "Barbell",
+      "Squat Rack"
+    ]
+  },
+  {
+    "name": "Machine Hack Squat",
+    "type": "Legs",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Glute Kickback",
+    "type": "Legs",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Glute Bridge",
+    "type": "Legs",
+    "equipment": [
+      "Bench"
+    ]
+  },
+  {
+    "name": "Glute Bridge (Unilateral)",
+    "type": "Legs",
+    "equipment": [
+      "Bench"
+    ]
+  },
+  {
+    "name": "Lying Clamshells",
+    "type": "Legs",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Lying Clamshells w/Band",
+    "type": "Legs",
+    "equipment": [
+      "Bodyweight",
+      "Other"
+    ]
+  },
+  {
+    "name": "Pull Through",
+    "type": "Legs",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Leg Press",
+    "type": "Legs",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Leg Press (Unilateral)",
+    "type": "Legs",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Leg Press (Narrow Stance)",
+    "type": "Legs",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Leg Press (Wide Stance)",
+    "type": "Legs",
+    "equipment": [
+      "Machine"
+    ]
+  },
+  {
+    "name": "Step Up",
+    "type": "Legs",
+    "equipment": [
+      "Freeweights",
+      "Other"
+    ]
+  },
+  {
+    "name": "Lateral Lunge",
+    "type": "Legs",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Sissy Squat",
+    "type": "Legs",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Sled Push",
+    "type": "Legs",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Zercher Squat",
+    "type": "Legs",
+    "equipment": [
+      "Barbell",
+      "Squat Rack"
+    ]
+  },
+  {
+    "name": "Box Jump",
+    "type": "Legs",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "BB Pistol Squat",
+    "type": "Legs",
+    "equipment": [
+      "Barbell",
+      "Squat Rack"
+    ]
+  },
+  {
+    "name": "DB Pistol Squat",
+    "type": "Legs",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Bulgarian BB Split Squat",
+    "type": "Legs",
+    "equipment": [
+      "Barbell",
+      "Bench",
+      "Squat Rack"
+    ]
+  },
+  {
+    "name": "Bulgarian DB Split Squat",
+    "type": "Legs",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Romanian Deadlift",
+    "type": "Legs",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Romanian Deadlift (Unilateral)",
+    "type": "Legs",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "DB Hamstring Curl",
+    "type": "Legs",
+    "equipment": [
+      "Freeweights",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Kettlebell Swing",
+    "type": "Legs",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Kettlebell Swing (Unilateral)",
+    "type": "Legs",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Nordic Hamstring Curl",
+    "type": "Legs",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Exercise Ball Leg Curl",
+    "type": "Legs",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Exercise Ball Leg Curl (Unilateral)",
+    "type": "Legs",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Valslide Leg Curl",
+    "type": "Legs",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Valslide Leg Curl (Unilateral)",
+    "type": "Legs",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Dragon Flags",
+    "type": "Core",
+    "equipment": [
+      "Bench"
+    ]
+  },
+  {
+    "name": "On Bench Abdominal Reverse Crunch",
+    "type": "Core",
+    "equipment": [
+      "Bench"
+    ]
+  },
+  {
+    "name": "Decline Bench Abdominal Reach",
+    "type": "Core",
+    "equipment": [
+      "Decline Bench"
+    ]
+  },
+  {
+    "name": "Bicycles",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Abdominal Crunch",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Exercise Ball Abdominal Crunch",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight",
+      "Other"
+    ]
+  },
+  {
+    "name": "Decline Abdominal Crunch",
+    "type": "Core",
+    "equipment": [
+      "Decline Bench"
+    ]
+  },
+  {
+    "name": "Cable Rope Abdominal Crunch",
+    "type": "Core",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Side Abdominal Crunch",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Side Oblique Bend",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Lying Leg Raise",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Lying Leg Raise (Bench)",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Lying Leg Raise (Decline)",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight",
+      "Decline Bench"
+    ]
+  },
+  {
+    "name": "Alternating Lying Leg Raise",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Alternating Lying Leg Raise (Bench)",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Alternating Lying Leg Raise (Decline)",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight",
+      "Decline Bench"
+    ]
+  },
+  {
+    "name": "Hanging Leg Raise",
+    "type": "Core",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Plank",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Plank w/Shoulder Taps",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Plank w/Reach",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Feet Elevated Plank",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Feet Elevated Plank w/Shoulder Taps",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Feet Elevated Plank w/Reach",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight",
+      "Bench"
+    ]
+  },
+  {
+    "name": "Side Plank",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Side Plank w/Hip Dip",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Side Plank w/Leg Raise",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Sit Up",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Decline Sit Up",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight",
+      "Decline Bench"
+    ]
+  },
+  {
+    "name": "Abdominal Rollouts",
+    "type": "Core",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Russian Twist",
+    "type": "Core",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Hanging Knee Raise",
+    "type": "Core",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Mountain Climber",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Abdominal Vacuum (Standing)",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Abdominal Vacuum (Lying)",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Pallof Press",
+    "type": "Core",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Pallof Press (Half Kneeling)",
+    "type": "Core",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Dead Bug",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Lying Floor Knee Tuck",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Hanging Knee Raise w/Twist",
+    "type": "Core",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Seated Knee Tuck (Bench)",
+    "type": "Core",
+    "equipment": [
+      "Bench"
+    ]
+  },
+  {
+    "name": "Roman Chair Knee Raise",
+    "type": "Core",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Roman Chair Knee Raise w/Twist",
+    "type": "Core",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Roman Chair Leg Raise",
+    "type": "Core",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Oblique Crunch (Cable)",
+    "type": "Core",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Turkish Get Up",
+    "type": "Core",
+    "equipment": [
+      "Freeweights"
+    ]
+  },
+  {
+    "name": "Jackknife",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Heel Touches",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Standing BB Twist",
+    "type": "Core",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Stir the Pot (Exercise Ball)",
+    "type": "Core",
+    "equipment": [
+      "Other"
+    ]
+  },
+  {
+    "name": "Lying Abdominal Pendulum",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Weighted Decline Twist",
+    "type": "Core",
+    "equipment": [
+      "Freeweights",
+      "Decline Bench"
+    ]
+  },
+  {
+    "name": "Superman",
+    "type": "Core",
+    "equipment": [
+      "Bodyweight"
+    ]
+  },
+  {
+    "name": "Wood Chop",
+    "type": "Core",
+    "equipment": [
+      "Cable Machine"
+    ]
+  },
+  {
+    "name": "Landmine Abdominal Rotation",
+    "type": "Core",
+    "equipment": [
+      "Barbell"
+    ]
+  },
+  {
+    "name": "Treadmill",
+    "type": "Cardio",
+    "equipment": [
+      "Treadmill"
+    ]
+  },
+  {
+    "name": "Stairs",
+    "type": "Cardio",
+    "equipment": [
+      "Stair Climber"
+    ]
+  },
+  {
+    "name": "Ladder Climbs",
+    "type": "Cardio",
+    "equipment": [
+      "Jacobs Ladder"
+    ]
+  },
+  {
+    "name": "Cycling",
+    "type": "Cardio",
+    "equipment": [
+      "Exercise Bike"
+    ]
+  },
+  {
+    "name": "Cycling (Recumbent)",
+    "type": "Cardio",
+    "equipment": [
+      "Recumbent Bike"
+    ]
+  },
+  {
+    "name": "Elliptical",
+    "type": "Cardio",
+    "equipment": [
+      "Elliptical"
+    ]
+  }
+]
