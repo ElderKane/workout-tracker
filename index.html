@@ -645,7 +645,7 @@
             const paths = [
                 { path: `artifacts/${appId}/users/${currentUserId}/workout_logs`, callback: (snapshot) => { workoutLogs = snapshot.docs.map(doc => doc.data().date); renderCalendar(); } },
                 { path: `artifacts/${appId}/users/${currentUserId}/workout_plans`, callback: (snapshot) => { workoutPlans = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); renderWorkoutPlans(); } },
-                { path: `artifacts/${appId}/public/native_exercises`, callback: (snapshot) => { nativeExercises = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); combineAndRenderExercises(); } },
+                { path: `artifacts/${appId}/public/data/native_exercises`, callback: (snapshot) => { nativeExercises = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); combineAndRenderExercises(); } },
                 { path: `artifacts/${appId}/users/${currentUserId}/user_exercises`, callback: (snapshot) => { userExercises = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); combineAndRenderExercises(); } },
                 { path: `artifacts/${appId}/users/${currentUserId}/exercise_history`, callback: (snapshot) => { exerciseHistory = {}; snapshot.docs.forEach(doc => { exerciseHistory[doc.id] = doc.data(); }); renderExerciseDatabase(); } }
             ];
@@ -1641,7 +1641,7 @@
             showLoading();
             try {
                 // Check if exercises have already been uploaded to prevent duplicates
-                const nativeExercisesRef = collection(db, `artifacts/${appId}/public/native_exercises`);
+                const nativeExercisesRef = collection(db, `artifacts/${appId}/public/data/native_exercises`);
                 const existingSnapshot = await getDocs(query(nativeExercisesRef, where("isNative", "==", true)));
                 if (!existingSnapshot.empty) {
                     showModal("Native exercises have already been uploaded.");
